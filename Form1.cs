@@ -15,6 +15,8 @@ namespace MovingCaptureDotNet
         public Form1()
         {
             InitializeComponent();
+            var camera = new Camera(pictureBox2);
+            camera.startGrabing();
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)

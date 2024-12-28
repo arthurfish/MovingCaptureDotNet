@@ -14,7 +14,6 @@ namespace MovingCaptureDotNet
         [STAThread]
         static void Main()
         {
-            var c = new Camera(null);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
