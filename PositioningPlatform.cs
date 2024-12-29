@@ -27,7 +27,7 @@ namespace MovingCaptureDotNet
                 y = positionLimitMillimeter.y;
             return (x, y);
         }
-        private float _stepSize;
+        private float _stepSize = 5;
         public float stepSize
         {
             get { return _stepSize; }
@@ -46,6 +46,7 @@ namespace MovingCaptureDotNet
             {
                 zmcaux.ZAux_Direct_GetDpos(deviceHandle, xAxis, ref _position.x);
                 zmcaux.ZAux_Direct_GetDpos(deviceHandle, yAxis, ref _position.y);
+                Console.WriteLine($"pos read. ({_position.x}, {_position.y})");
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(position)));
                 return _position;
             }
@@ -54,6 +55,7 @@ namespace MovingCaptureDotNet
                 _position = clipPosition(value);
                 zmcaux.ZAux_Direct_Single_MoveAbs(deviceHandle, xAxis, _position.x);
                 zmcaux.ZAux_Direct_Single_MoveAbs(deviceHandle, yAxis, _position.y);
+                Console.WriteLine($"pos set. ({_position.x}, {_position.y})");
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(position)));
             }
         }
@@ -76,8 +78,10 @@ namespace MovingCaptureDotNet
 
         public void incrementMove(float deltaX, float deltaY)
         {
+            Console.WriteLine($"incrementMove({deltaX}, {deltaY})");
             zmcaux.ZAux_Direct_Single_Move(deviceHandle, xAxis, deltaX);
             zmcaux.ZAux_Direct_Single_Move(deviceHandle, yAxis, deltaY);
+
             var _ = position;
         }
 
@@ -131,7 +135,8 @@ namespace MovingCaptureDotNet
             zmcaux.ZAux_Direct_SetUnits(deviceHandle, 0, 20000);
             zmcaux.ZAux_Direct_SetAccel(deviceHandle, 0, 1000);
             zmcaux.ZAux_Direct_SetDecel(deviceHandle, 0, 1000);
-            zmcaux.ZAux_Direct_SetSpeed(deviceHandle, 0, 10);
+            zmcaux.ZAux_Direct_SetSpeed(deviceHandle, 0, 50);
+
         }
     }
 }
