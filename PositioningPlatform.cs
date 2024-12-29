@@ -10,8 +10,8 @@ namespace MovingCaptureDotNet
 {
     class PositioningPlatform : INotifyPropertyChanged
     {
-        private int xAxis = 0;
-        private int yAxis = 1;
+        private int xAxis = 1;
+        private int yAxis = 0;
         private (float x, float y) positionLimitMillimeter = (70, 70);
         private (float, float) clipPosition((float x, float y) position)
         {
@@ -46,7 +46,6 @@ namespace MovingCaptureDotNet
             {
                 zmcaux.ZAux_Direct_GetDpos(deviceHandle, xAxis, ref _position.x);
                 zmcaux.ZAux_Direct_GetDpos(deviceHandle, yAxis, ref _position.y);
-                Console.WriteLine($"pos read. ({_position.x}, {_position.y})");
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(position)));
                 return _position;
             }
@@ -85,7 +84,7 @@ namespace MovingCaptureDotNet
             var _ = position;
         }
 
-        private float _startX0, _startY0, _endX1, _endY1;
+        private float _startX0=0, _startY0=0, _endX1=0, _endY1=0;
         public float startX0
         {
             get => _startX0;
