@@ -58,6 +58,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MCC4DLL">
+      <HintPath>.\MCC4DLL.dll</HintPath>
+    </Reference>
     <Reference Include="MvCameraControl.Net">
       <HintPath>dlls\HikCameraDLL\win64\MvCameraControl.Net.dll</HintPath>
     </Reference>
@@ -76,6 +79,8 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="CameraErrorInfo.cs" />
+    <Compile Include="HeightAdjustDevice.cs" />
+    <Compile Include="MovementPath.cs" />
     <Compile Include="PositioningPlatform.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

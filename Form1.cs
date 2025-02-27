@@ -46,8 +46,11 @@ namespace MovingCaptureDotNet
             endX1Input.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.endX1), true, DataSourceUpdateMode.OnPropertyChanged);
             endY1Input.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.endY1), true, DataSourceUpdateMode.OnPropertyChanged);
             captureNumberInput.DataBindings.Add("Value", camera, nameof(camera.captureNumber), true, DataSourceUpdateMode.OnPropertyChanged);
-            
 
+            commandListBox.DisplayMember = "Description";
+            commandListBox.ValueMember = "Id";
+            startX0InputCopy.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.startX0), true, DataSourceUpdateMode.OnPropertyChanged);
+            startY0InputCopy.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.startY0), true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private Dictionary<String, (int x, int y)> directions = new Dictionary<string, (int, int)>
@@ -183,9 +186,26 @@ namespace MovingCaptureDotNet
             }
         }
 
-        private void tableLayoutPanel4_Paint(object sender, PaintEventArgs e)
+        private void addRectCoordButton_Click(object sender, EventArgs e)
         {
+            commandListBox.Items.Add(new CartesianCoordinateDirectionalMotion((double)deltaXInput.Value, (double)deltaYInput.Value));
+        }
 
+        private void addPolarCoordButton_Click(object sender, EventArgs e)
+        {
+            commandListBox.Items.Add(new PolarCoordinateDirectionalMotion((double)thetaInput.Value, (double)deltaRInput.Value));
+        }
+
+        private void motionRemoveButton_Click(object sender, EventArgs e)
+        {
+            if(commandListBox.SelectedItem != null)
+            {
+                commandListBox.Items.Remove(commandListBox.SelectedItem);
+            }
+            else
+            {
+                commandListBox.Items.RemoveAt(commandListBox.Items.Count - 1);
+            }
         }
     }
 }
