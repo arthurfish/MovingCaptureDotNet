@@ -99,6 +99,7 @@ namespace MovingCaptureDotNet
             this.deltaXInput = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.deltaYInput = new System.Windows.Forms.NumericUpDown();
+            this.commandApplyProgressBar = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveSpeedInput)).BeginInit();
@@ -586,6 +587,7 @@ namespace MovingCaptureDotNet
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.commandApplyProgressBar);
             this.groupBox1.Controls.Add(this.groupBox4);
             this.groupBox1.Controls.Add(this.button5);
             this.groupBox1.Controls.Add(this.motionRemoveButton);
@@ -715,6 +717,7 @@ namespace MovingCaptureDotNet
             this.button5.TabIndex = 31;
             this.button5.Text = "Start !";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // motionRemoveButton
             // 
@@ -928,11 +931,18 @@ namespace MovingCaptureDotNet
             this.deltaYInput.Size = new System.Drawing.Size(120, 35);
             this.deltaYInput.TabIndex = 2;
             // 
+            // commandApplyProgressBar
+            // 
+            this.commandApplyProgressBar.Location = new System.Drawing.Point(332, 631);
+            this.commandApplyProgressBar.Name = "commandApplyProgressBar";
+            this.commandApplyProgressBar.Size = new System.Drawing.Size(341, 23);
+            this.commandApplyProgressBar.TabIndex = 33;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2467, 1399);
+            this.ClientSize = new System.Drawing.Size(2164, 1399);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tableLayoutPanel4);
             this.Controls.Add(this.captureProgressBar);
@@ -1058,6 +1068,7 @@ namespace MovingCaptureDotNet
         private Label label24;
         private Button motionRemoveButton;
         private GroupBox groupBox4;
+        private ProgressBar commandApplyProgressBar;
     }
 
 

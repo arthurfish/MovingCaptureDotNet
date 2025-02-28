@@ -84,6 +84,14 @@ namespace MovingCaptureDotNet
             var _ = position;
         }
 
+        public bool isMoving()
+        {
+            int xIdle = 0, yIdle = 0;
+            zmcaux.ZAux_Direct_GetIfIdle(deviceHandle, xAxis, ref xIdle);
+            zmcaux.ZAux_Direct_GetIfIdle(deviceHandle, yAxis, ref yIdle);
+            return xIdle == 0 || yIdle == 0;
+        }
+
         private float _startX0=0, _startY0=0, _endX1=0, _endY1=0;
         public float startX0
         {

@@ -207,5 +207,18 @@ namespace MovingCaptureDotNet
                 commandListBox.Items.RemoveAt(commandListBox.Items.Count - 1);
             }
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+            MotionUtils.applyMotions(
+                commandListBox.Items.Cast<IMotion>(),
+                motion => positioningPlatform.incrementMove((float)motion.DeltaX, (float)motion.DeltaY),
+                positioningPlatform.isMoving,
+                percent => commandApplyProgressBar.Value = (int)(100 * percent),
+                () => pictureBox2.Image = camera.getImage()
+            );
+                
+        }
     }
 }
