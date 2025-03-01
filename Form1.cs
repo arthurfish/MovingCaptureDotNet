@@ -23,7 +23,7 @@ namespace MovingCaptureDotNet
         public Form1()
         {
             InitializeComponent();
-            this.Width = 800;
+            this.Width = 1600;
             this.Height = 700;
             positioningPlatform = new PositioningPlatform();
             heightAdjustDevice = new HeightAdjustDevice();
@@ -56,6 +56,8 @@ namespace MovingCaptureDotNet
 
             heightStepSize.DataBindings.Add("Value", heightAdjustDevice, nameof(heightAdjustDevice.StepSize), true, DataSourceUpdateMode.OnPropertyChanged);
             currentHeight.DataBindings.Add("Value", heightAdjustDevice, nameof(heightAdjustDevice.Position), true, DataSourceUpdateMode.OnPropertyChanged);
+            button5.Enabled = (commandListBox.Items.Count >= 1);
+
         }
 
         private Dictionary<String, (int x, int y)> directions = new Dictionary<string, (int, int)>
@@ -194,11 +196,13 @@ namespace MovingCaptureDotNet
         private void addRectCoordButton_Click(object sender, EventArgs e)
         {
             commandListBox.Items.Add(new CartesianCoordinateDirectionalMotion((double)deltaXInput.Value, (double)deltaYInput.Value, (int)rectCoordStepsInput.Value));
+            button5.Enabled = (commandListBox.Items.Count >= 1);
         }
 
         private void addPolarCoordButton_Click(object sender, EventArgs e)
         {
             commandListBox.Items.Add(new PolarCoordinateDirectionalMotion((double)thetaInput.Value, (double)deltaRInput.Value, (int)polarCoordStepsInput.Value));
+            button5.Enabled = (commandListBox.Items.Count >= 1);
         }
 
         private void motionRemoveButton_Click(object sender, EventArgs e)
@@ -215,18 +219,34 @@ namespace MovingCaptureDotNet
 
         private void button5_Click(object sender, EventArgs e)
         {
-
-            MotionUtils.applyMotions(
-                commandListBox.Items.Cast<IMotion>(),
-                motion => positioningPlatform.incrementMove((float)motion.DeltaX, (float)motion.DeltaY),
-                positioningPlatform.isMoving,
-                percent => commandApplyProgressBar.Invoke(new Action(() => {
-                    commandApplyProgressBar.Value = (int)(100 * percent);
+            button5.Enabled = false;
+            var saver = new ImageSaver();
+            var task = Task.Run(() =>
+            {
+                MotionUtils.applyMotions(
+                    commandListBox.Items.Cast<IMotion>(),
+                    motion => positioningPlatform.incrementMove((float)motion.DeltaX, (float)motion.DeltaY),
+                    positioningPlatform.isMoving,
+                    p => commandApplyProgressBar.Invoke(new Action(() => {
+                        commandApplyProgressBar.Value = (int)(100 * p);
                     })),
-                () => commandApplyProgressBar.Invoke(new Action(() => {
-                    pictureBox2.Image = camera.getImage();
-                }))
-            );
+                    () =>
+                    {
+                        var image = camera.getImage();
+                        commandApplyProgressBar.Invoke(new Action(() =>
+                        {
+                            pictureBox2.Image = image;
+                        }));
+                        var pos = positioningPlatform.position;
+                        saver.AddImage(image, $"{pos.x}, {pos.y}");
+                    }
+                );
+                saver.Save();
+                button5.Invoke(new Action(() =>
+                {
+                    button5.Enabled = true;
+                }));
+            });
                 
         }
 

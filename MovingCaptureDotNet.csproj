@@ -80,6 +80,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="CameraErrorInfo.cs" />
     <Compile Include="HeightAdjustDevice.cs" />
+    <Compile Include="ImageSaver.cs" />
     <Compile Include="MovementPath.cs" />
     <Compile Include="PositioningPlatform.cs" />
     <Compile Include="Form1.cs">

@@ -27,7 +27,7 @@ namespace MovingCaptureDotNet
         }
         public double DeltaX => _deltaX;
         public double DeltaY => _deltaY;
-        public String Description => $"(Δx: {_deltaX:F2}[mm], Δy: {_deltaY:F2}[mm])";
+        public String Description => $"[C] {_steps}x (Δx: {_deltaX:F2}[mm], Δy: {_deltaY:F2}[mm])";
         private string _id = System.Guid.NewGuid().ToString("N");
         public string Id => _id;
         public int Steps => _steps;
@@ -44,7 +44,7 @@ namespace MovingCaptureDotNet
         }
         public double DeltaX => _deltaR * Math.Cos(_theta);
         public double DeltaY => _deltaR * Math.Sin(_theta);
-        public String Description => $"(θ: {_theta:F2}[deg], Δr: {_deltaR:F2}[mm])";
+        public String Description => $"[P] {_steps}x (θ: {_theta:F2}[deg], Δr: {_deltaR:F2}[mm])";
         private string _id = System.Guid.NewGuid().ToString("N");
         public string Id => _id;
         public int Steps => _steps;
@@ -52,20 +52,26 @@ namespace MovingCaptureDotNet
 
     class MotionUtils
     {
-        public static void applyMotions(IEnumerable<IMotion> motions, Action<IMotion> move, Func<bool> isAvaliable, Action<Double> setProcessPercentage, Action takePhoto)
+        public static void applyMotions(IEnumerable<IMotion> motions, Action<IMotion> move, Func<bool> isAvaliable, Action<double> setProgress, Action takePhoto)
         {
-            var total = motions.Count();
+            var total = 0;
+            foreach (IMotion mot in motions)
+            {
+                total += mot.Steps;
+            }
             var counter = 0;
             foreach(IMotion mot in motions)
             {
                 for (int i = 0; i < mot.Steps; i++)
                 {
                     move(mot);
-                    setProcessPercentage((counter + 1) / total);
+                    setProgress((counter+1.0)/total);
                     while (!isAvaliable()) ;
+                    System.Threading.Thread.Sleep(500);
                     takePhoto();
+                    System.Threading.Thread.Sleep(500);
+                    counter++;
                 }
-                counter++;
             }
         }
     }

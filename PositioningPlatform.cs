@@ -44,16 +44,18 @@ namespace MovingCaptureDotNet
         {
             get
             {
-                zmcaux.ZAux_Direct_GetDpos(deviceHandle, xAxis, ref _position.x);
-                zmcaux.ZAux_Direct_GetDpos(deviceHandle, yAxis, ref _position.y);
+                zmcaux.ZAux_Direct_GetDpos(deviceHandle, xAxis, ref _position.y);
+                zmcaux.ZAux_Direct_GetDpos(deviceHandle, yAxis, ref _position.x);
+                _position.y = -_position.y;
+                _position.x = -_position.x;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(position)));
                 return _position;
             }
             set
             {
                 _position = clipPosition(value);
-                zmcaux.ZAux_Direct_Single_MoveAbs(deviceHandle, xAxis, _position.x);
-                zmcaux.ZAux_Direct_Single_MoveAbs(deviceHandle, yAxis, _position.y);
+                zmcaux.ZAux_Direct_Single_MoveAbs(deviceHandle, xAxis, -_position.y);
+                zmcaux.ZAux_Direct_Single_MoveAbs(deviceHandle, yAxis, -_position.x);
                 Console.WriteLine($"pos set. ({_position.x}, {_position.y})");
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(position)));
             }
@@ -78,8 +80,8 @@ namespace MovingCaptureDotNet
         public void incrementMove(float deltaX, float deltaY)
         {
             Console.WriteLine($"incrementMove({deltaX}, {deltaY})");
-            zmcaux.ZAux_Direct_Single_Move(deviceHandle, xAxis, deltaX);
-            zmcaux.ZAux_Direct_Single_Move(deviceHandle, yAxis, deltaY);
+            zmcaux.ZAux_Direct_Single_Move(deviceHandle, xAxis, -deltaY);
+            zmcaux.ZAux_Direct_Single_Move(deviceHandle, yAxis, -deltaX);
 
             var _ = position;
         }
