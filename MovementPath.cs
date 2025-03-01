@@ -42,8 +42,12 @@ namespace MovingCaptureDotNet
             _theta = theta;
             _steps = steps;
         }
-        public double DeltaX => _deltaR * Math.Cos(_theta);
-        public double DeltaY => _deltaR * Math.Sin(_theta);
+        private double DegreesToRadians(double degrees)
+        {
+            return degrees * Math.PI / 180.0;
+        }
+        public double DeltaX => _deltaR * Math.Cos(DegreesToRadians(_theta));
+        public double DeltaY => _deltaR * Math.Sin(DegreesToRadians(_theta));
         public String Description => $"[P] {_steps}x (θ: {_theta:F2}[deg], Δr: {_deltaR:F2}[mm])";
         private string _id = System.Guid.NewGuid().ToString("N");
         public string Id => _id;
