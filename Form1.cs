@@ -195,13 +195,13 @@ namespace MovingCaptureDotNet
 
         private void addRectCoordButton_Click(object sender, EventArgs e)
         {
-            commandListBox.Items.Add(new CartesianCoordinateDirectionalMotion((double)deltaXInput.Value, (double)deltaYInput.Value, (int)rectCoordStepsInput.Value));
+            commandListBox.Items.Add(new CartesianCoordinateDirectionalMotion((double)deltaXInput.Value, (double)deltaYInput.Value, (double)deltaZInputRect.Value, (int)rectCoordStepsInput.Value));
             button5.Enabled = (commandListBox.Items.Count >= 1);
         }
 
         private void addPolarCoordButton_Click(object sender, EventArgs e)
         {
-            commandListBox.Items.Add(new PolarCoordinateDirectionalMotion((double)thetaInput.Value, (double)deltaRInput.Value, (int)polarCoordStepsInput.Value));
+            commandListBox.Items.Add(new PolarCoordinateDirectionalMotion((double)thetaInput.Value, (double)deltaRInput.Value, (double)deltaZInputPolar.Value, (int)polarCoordStepsInput.Value));
             button5.Enabled = (commandListBox.Items.Count >= 1);
         }
 
@@ -225,7 +225,10 @@ namespace MovingCaptureDotNet
             {
                 MotionUtils.applyMotions(
                     commandListBox.Items.Cast<IMotion>(),
-                    motion => positioningPlatform.incrementMove((float)motion.DeltaX, (float)motion.DeltaY),
+                    motion => { 
+                        positioningPlatform.incrementMove((float)motion.DeltaX, (float)motion.DeltaY);
+                        heightAdjustDevice.IncrementMove((float)motion.DeltaZ);
+                    },
                     positioningPlatform.isMoving,
                     p => commandApplyProgressBar.Invoke(new Action(() => {
                         commandApplyProgressBar.Value = (int)(100 * p);
@@ -238,7 +241,7 @@ namespace MovingCaptureDotNet
                             pictureBox2.Image = image;
                         }));
                         var pos = positioningPlatform.position;
-                        saver.AddImage(image, $"{pos.x}, {pos.y}");
+                        saver.AddImage(image, $"{pos.x}, {pos.y}, {heightAdjustDevice.Position}");
                     }
                 );
                 saver.Save();
