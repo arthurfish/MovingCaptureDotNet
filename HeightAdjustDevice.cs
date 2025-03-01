@@ -6,18 +6,30 @@ using System.Threading.Tasks;
 using SerialPortLibrary;
 using System.IO.Ports;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 
 
 namespace MovingCaptureDotNet
 {
-    class HeightAdjustDevice
+    class HeightAdjustDevice: INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         private SPLibClass _device;
         private int AxisId = 0;
         public readonly double StepAngle = 1.8;
         public readonly float LeadScrewPitch = 5;
         private readonly int PositiveDirection = 1;
+        private double _stepSize = 1;
+        public double StepSize
+        {
+            get => _stepSize;
+            set
+            {
+                _stepSize = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepSize)));
+            }
+        }
 
         private int _microsteppingFactor = 20;
         public int MicrosteppingFactor
@@ -30,10 +42,30 @@ namespace MovingCaptureDotNet
         {
             return result == 1;
         }
-        public void MoveTo(float distanceInMilimeter)
+        
+        private double _position = 0;
+        public double Position
         {
-            //Suppose it works.
+            get {
+                float[] temp = new float[1];
+                _device.MoCtrCard_GetAxisPos((byte)AxisId, temp);
+                _position = temp[0];
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Position)));
+                Console.WriteLine($"Height(get): {_position}");
+                return _position;
+            }
+            set
+            {
+                if (value != _position)
+                {
+                    _position = value;
+                    _device.MoCtrCard_MCrlAxisAbsMove((byte)AxisId, (float)_position, 10, 10);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Position)));
+                    Console.WriteLine($"Height(set): {_position}");
+                }
+            }
         }
+
         public HeightAdjustDevice()
         {
             _device = new SPLibClass();
@@ -50,6 +82,7 @@ namespace MovingCaptureDotNet
             {
                 throw new Exception("Can NOT open the height adjust motor.");
             }
+            
         }
 
         ~HeightAdjustDevice()

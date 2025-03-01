@@ -23,6 +23,9 @@ namespace MovingCaptureDotNet
             }
             base.Dispose(disposing);
         }
+        private PositioningPlatform positioningPlatform;
+        private Camera camera;
+        private HeightAdjustDevice heightAdjustDevice;
 
         #region Windows Form Designer generated code
 
@@ -69,6 +72,7 @@ namespace MovingCaptureDotNet
             this.label13 = new System.Windows.Forms.Label();
             this.commandListBox = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.commandApplyProgressBar = new System.Windows.Forms.ProgressBar();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.label23 = new System.Windows.Forms.Label();
@@ -99,7 +103,14 @@ namespace MovingCaptureDotNet
             this.deltaXInput = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.deltaYInput = new System.Windows.Forms.NumericUpDown();
-            this.commandApplyProgressBar = new System.Windows.Forms.ProgressBar();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.currentHeight = new System.Windows.Forms.NumericUpDown();
+            this.label20 = new System.Windows.Forms.Label();
+            this.HeightDownButton = new System.Windows.Forms.Button();
+            this.HeightZeroButton = new System.Windows.Forms.Button();
+            this.heightStepSize = new System.Windows.Forms.NumericUpDown();
+            this.HeightUpButton = new System.Windows.Forms.Button();
+            this.label21 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveSpeedInput)).BeginInit();
@@ -128,6 +139,9 @@ namespace MovingCaptureDotNet
             ((System.ComponentModel.ISupportInitialize)(this.rectCoordStepsInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaXInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaYInput)).BeginInit();
+            this.tableLayoutPanel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.currentHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.heightStepSize)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox2
@@ -214,6 +228,7 @@ namespace MovingCaptureDotNet
             this.returnToZeroButton.TabIndex = 3;
             this.returnToZeroButton.Text = "Zero";
             this.returnToZeroButton.UseVisualStyleBackColor = true;
+            this.returnToZeroButton.Click += new System.EventHandler(this.returnToZeroButton_Click_1);
             // 
             // moveSpeedInput
             // 
@@ -601,6 +616,13 @@ namespace MovingCaptureDotNet
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Move Commands";
             // 
+            // commandApplyProgressBar
+            // 
+            this.commandApplyProgressBar.Location = new System.Drawing.Point(332, 631);
+            this.commandApplyProgressBar.Name = "commandApplyProgressBar";
+            this.commandApplyProgressBar.Size = new System.Drawing.Size(341, 23);
+            this.commandApplyProgressBar.TabIndex = 33;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.tableLayoutPanel7);
@@ -931,12 +953,133 @@ namespace MovingCaptureDotNet
             this.deltaYInput.Size = new System.Drawing.Size(120, 35);
             this.deltaYInput.TabIndex = 2;
             // 
-            // commandApplyProgressBar
+            // tableLayoutPanel9
             // 
-            this.commandApplyProgressBar.Location = new System.Drawing.Point(332, 631);
-            this.commandApplyProgressBar.Name = "commandApplyProgressBar";
-            this.commandApplyProgressBar.Size = new System.Drawing.Size(341, 23);
-            this.commandApplyProgressBar.TabIndex = 33;
+            this.tableLayoutPanel9.ColumnCount = 4;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel9.Controls.Add(this.currentHeight, 3, 1);
+            this.tableLayoutPanel9.Controls.Add(this.label20, 2, 0);
+            this.tableLayoutPanel9.Controls.Add(this.HeightDownButton, 1, 2);
+            this.tableLayoutPanel9.Controls.Add(this.HeightZeroButton, 1, 1);
+            this.tableLayoutPanel9.Controls.Add(this.heightStepSize, 3, 0);
+            this.tableLayoutPanel9.Controls.Add(this.HeightUpButton, 1, 0);
+            this.tableLayoutPanel9.Controls.Add(this.label21, 2, 1);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(20, 1058);
+            this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(2);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 3;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(452, 198);
+            this.tableLayoutPanel9.TabIndex = 3;
+            // 
+            // currentHeight
+            // 
+            this.currentHeight.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.currentHeight.Location = new System.Drawing.Point(302, 68);
+            this.currentHeight.Margin = new System.Windows.Forms.Padding(2);
+            this.currentHeight.Maximum = new decimal(new int[] {
+            429,
+            0,
+            0,
+            65536});
+            this.currentHeight.Minimum = new decimal(new int[] {
+            576,
+            0,
+            0,
+            -2147418112});
+            this.currentHeight.Name = "currentHeight";
+            this.currentHeight.Size = new System.Drawing.Size(148, 35);
+            this.currentHeight.TabIndex = 27;
+            this.currentHeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(152, 0);
+            this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(130, 48);
+            this.label20.TabIndex = 14;
+            this.label20.Text = "Step Size [mm]";
+            // 
+            // HeightDownButton
+            // 
+            this.HeightDownButton.Location = new System.Drawing.Point(2, 134);
+            this.HeightDownButton.Margin = new System.Windows.Forms.Padding(2);
+            this.HeightDownButton.Name = "HeightDownButton";
+            this.HeightDownButton.Size = new System.Drawing.Size(146, 62);
+            this.HeightDownButton.TabIndex = 2;
+            this.HeightDownButton.Text = "Down";
+            this.HeightDownButton.UseVisualStyleBackColor = true;
+            this.HeightDownButton.Click += new System.EventHandler(this.HeightDownButton_Click);
+            // 
+            // HeightZeroButton
+            // 
+            this.HeightZeroButton.Location = new System.Drawing.Point(2, 68);
+            this.HeightZeroButton.Margin = new System.Windows.Forms.Padding(2);
+            this.HeightZeroButton.Name = "HeightZeroButton";
+            this.HeightZeroButton.Size = new System.Drawing.Size(146, 61);
+            this.HeightZeroButton.TabIndex = 3;
+            this.HeightZeroButton.Text = "Zero";
+            this.HeightZeroButton.UseVisualStyleBackColor = true;
+            this.HeightZeroButton.Click += new System.EventHandler(this.HeightZeroButton_Click);
+            // 
+            // heightStepSize
+            // 
+            this.heightStepSize.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.heightStepSize.Location = new System.Drawing.Point(302, 2);
+            this.heightStepSize.Margin = new System.Windows.Forms.Padding(2);
+            this.heightStepSize.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.heightStepSize.Name = "heightStepSize";
+            this.heightStepSize.Size = new System.Drawing.Size(148, 35);
+            this.heightStepSize.TabIndex = 5;
+            this.heightStepSize.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // HeightUpButton
+            // 
+            this.HeightUpButton.Location = new System.Drawing.Point(2, 2);
+            this.HeightUpButton.Margin = new System.Windows.Forms.Padding(2);
+            this.HeightUpButton.Name = "HeightUpButton";
+            this.HeightUpButton.Size = new System.Drawing.Size(146, 61);
+            this.HeightUpButton.TabIndex = 2;
+            this.HeightUpButton.Text = "Up";
+            this.HeightUpButton.UseVisualStyleBackColor = true;
+            this.HeightUpButton.Click += new System.EventHandler(this.HeightUpButton_Click);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(152, 66);
+            this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(142, 48);
+            this.label21.TabIndex = 14;
+            this.label21.Text = "Current Height [mm]";
             // 
             // Form1
             // 
@@ -951,6 +1094,7 @@ namespace MovingCaptureDotNet
             this.Controls.Add(this.label12);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);
+            this.Controls.Add(this.tableLayoutPanel9);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.pictureBox2);
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -990,6 +1134,10 @@ namespace MovingCaptureDotNet
             ((System.ComponentModel.ISupportInitialize)(this.rectCoordStepsInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaXInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaYInput)).EndInit();
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.tableLayoutPanel9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.currentHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.heightStepSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1030,8 +1178,8 @@ namespace MovingCaptureDotNet
         private NumericUpDown endX1Input;
         private PictureBox pictureBox2;
 
-        private PositioningPlatform positioningPlatform;
-        private Camera camera;
+
+
         private ProgressBar captureProgressBar;
         private TableLayoutPanel tableLayoutPanel4;
         private Label label14;
@@ -1069,6 +1217,14 @@ namespace MovingCaptureDotNet
         private Button motionRemoveButton;
         private GroupBox groupBox4;
         private ProgressBar commandApplyProgressBar;
+        private TableLayoutPanel tableLayoutPanel9;
+        private Button HeightDownButton;
+        private Button HeightZeroButton;
+        private Button HeightUpButton;
+        private Label label20;
+        private NumericUpDown heightStepSize;
+        private Label label21;
+        private NumericUpDown currentHeight;
     }
 
 
