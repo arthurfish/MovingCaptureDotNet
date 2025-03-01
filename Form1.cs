@@ -26,6 +26,8 @@ namespace MovingCaptureDotNet
             this.Width = 800;
             this.Height = 700;
             positioningPlatform = new PositioningPlatform();
+            heightAdjustDevice = new HeightAdjustDevice();
+            heightAdjustDevice.Position = 0;
             camera = new Camera(pictureBox2);
             camera.startGrabing();
             this.pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
@@ -51,6 +53,9 @@ namespace MovingCaptureDotNet
             commandListBox.ValueMember = "Id";
             startX0InputCopy.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.startX0), true, DataSourceUpdateMode.OnPropertyChanged);
             startY0InputCopy.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.startY0), true, DataSourceUpdateMode.OnPropertyChanged);
+
+            heightStepSize.DataBindings.Add("Value", heightAdjustDevice, nameof(heightAdjustDevice.StepSize), true, DataSourceUpdateMode.OnPropertyChanged);
+            currentHeight.DataBindings.Add("Value", heightAdjustDevice, nameof(heightAdjustDevice.Position), true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private Dictionary<String, (int x, int y)> directions = new Dictionary<string, (int, int)>
@@ -188,12 +193,12 @@ namespace MovingCaptureDotNet
 
         private void addRectCoordButton_Click(object sender, EventArgs e)
         {
-            commandListBox.Items.Add(new CartesianCoordinateDirectionalMotion((double)deltaXInput.Value, (double)deltaYInput.Value));
+            commandListBox.Items.Add(new CartesianCoordinateDirectionalMotion((double)deltaXInput.Value, (double)deltaYInput.Value, (int)rectCoordStepsInput.Value));
         }
 
         private void addPolarCoordButton_Click(object sender, EventArgs e)
         {
-            commandListBox.Items.Add(new PolarCoordinateDirectionalMotion((double)thetaInput.Value, (double)deltaRInput.Value));
+            commandListBox.Items.Add(new PolarCoordinateDirectionalMotion((double)thetaInput.Value, (double)deltaRInput.Value, (int)polarCoordStepsInput.Value));
         }
 
         private void motionRemoveButton_Click(object sender, EventArgs e)
@@ -215,10 +220,39 @@ namespace MovingCaptureDotNet
                 commandListBox.Items.Cast<IMotion>(),
                 motion => positioningPlatform.incrementMove((float)motion.DeltaX, (float)motion.DeltaY),
                 positioningPlatform.isMoving,
-                percent => commandApplyProgressBar.Value = (int)(100 * percent),
-                () => pictureBox2.Image = camera.getImage()
+                percent => commandApplyProgressBar.Invoke(new Action(() => {
+                    commandApplyProgressBar.Value = (int)(100 * percent);
+                    })),
+                () => commandApplyProgressBar.Invoke(new Action(() => {
+                    pictureBox2.Image = camera.getImage();
+                }))
             );
                 
+        }
+
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void HeightUpButton_Click(object sender, EventArgs e)
+        {
+            heightAdjustDevice.Position += heightAdjustDevice.StepSize;
+        }
+
+        private void HeightZeroButton_Click(object sender, EventArgs e)
+        {
+            heightAdjustDevice.Position = 0;
+        }
+
+        private void HeightDownButton_Click(object sender, EventArgs e)
+        {
+            heightAdjustDevice.Position -= heightAdjustDevice.StepSize;
+        }
+
+        private void returnToZeroButton_Click_1(object sender, EventArgs e)
+        {
+            positioningPlatform.position = (0, 0);
         }
     }
 }

@@ -143,6 +143,9 @@ namespace MovingCaptureDotNet
             zmcaux.ZAux_Direct_SetAccel(deviceHandle, 0, 1000);
             zmcaux.ZAux_Direct_SetDecel(deviceHandle, 0, 1000);
             zmcaux.ZAux_Direct_SetSpeed(deviceHandle, 0, 50);
+            zmcaux.ZAux_Direct_SetAxisEnable(deviceHandle, xAxis, 1);
+            zmcaux.ZAux_Direct_SetAxisEnable(deviceHandle, yAxis, 1);
+
 
         }
     }

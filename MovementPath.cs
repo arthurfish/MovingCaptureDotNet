@@ -19,10 +19,11 @@ namespace MovingCaptureDotNet
     {
         private double _deltaX, _deltaY;
         private int _steps;
-        public CartesianCoordinateDirectionalMotion(double deltaX, double deltaY)
+        public CartesianCoordinateDirectionalMotion(double deltaX, double deltaY, int steps)
         {
             _deltaX = deltaX;
             _deltaY = deltaY;
+            _steps = steps;
         }
         public double DeltaX => _deltaX;
         public double DeltaY => _deltaY;
@@ -35,10 +36,11 @@ namespace MovingCaptureDotNet
     {
         private double _deltaR, _theta;
         private int _steps;
-        public PolarCoordinateDirectionalMotion(double theta, double deltaR)
+        public PolarCoordinateDirectionalMotion(double theta, double deltaR, int steps)
         {
             _deltaR = deltaR;
             _theta = theta;
+            _steps = steps;
         }
         public double DeltaX => _deltaR * Math.Cos(_theta);
         public double DeltaY => _deltaR * Math.Sin(_theta);
@@ -56,11 +58,14 @@ namespace MovingCaptureDotNet
             var counter = 0;
             foreach(IMotion mot in motions)
             {
-                move(mot);
-                setProcessPercentage((counter + 1) / total);
+                for (int i = 0; i < mot.Steps; i++)
+                {
+                    move(mot);
+                    setProcessPercentage((counter + 1) / total);
+                    while (!isAvaliable()) ;
+                    takePhoto();
+                }
                 counter++;
-                while (!isAvaliable()) ;
-                takePhoto();
             }
         }
     }
