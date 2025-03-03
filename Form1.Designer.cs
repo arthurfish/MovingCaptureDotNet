@@ -85,6 +85,8 @@ namespace MovingCaptureDotNet
             this.motionRemoveButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.deltaZInputPolar = new System.Windows.Forms.NumericUpDown();
+            this.label25 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.addPolarCoordButton = new System.Windows.Forms.Button();
@@ -95,6 +97,8 @@ namespace MovingCaptureDotNet
             this.deltaRInput = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.deltaZInputRect = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.addRectCoordButton = new System.Windows.Forms.Button();
@@ -112,10 +116,7 @@ namespace MovingCaptureDotNet
             this.HeightUpButton = new System.Windows.Forms.Button();
             this.label21 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.deltaZInputRect = new System.Windows.Forms.NumericUpDown();
-            this.label25 = new System.Windows.Forms.Label();
-            this.deltaZInputPolar = new System.Windows.Forms.NumericUpDown();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveSpeedInput)).BeginInit();
@@ -136,11 +137,13 @@ namespace MovingCaptureDotNet
             ((System.ComponentModel.ISupportInitialize)(this.startY0InputCopy)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deltaZInputPolar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.polarCoordStepsInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.thetaInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaRInput)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deltaZInputRect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rectCoordStepsInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaXInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaYInput)).BeginInit();
@@ -148,13 +151,12 @@ namespace MovingCaptureDotNet
             ((System.ComponentModel.ISupportInitialize)(this.currentHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightStepSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deltaZInputRect)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deltaZInputPolar)).BeginInit();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(1373, 15);
+            this.pictureBox2.Location = new System.Drawing.Point(1069, 28);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(1107, 783);
             this.pictureBox2.TabIndex = 1;
@@ -187,7 +189,7 @@ namespace MovingCaptureDotNet
             this.moveDownButton.Name = "moveDownButton";
             this.moveDownButton.Size = new System.Drawing.Size(144, 61);
             this.moveDownButton.TabIndex = 2;
-            this.moveDownButton.Text = "Down";
+            this.moveDownButton.Text = "后";
             this.moveDownButton.UseVisualStyleBackColor = true;
             this.moveDownButton.Click += new System.EventHandler(this.moveDownButton_Click);
             // 
@@ -197,7 +199,7 @@ namespace MovingCaptureDotNet
             this.moveUpButtion.Name = "moveUpButtion";
             this.moveUpButtion.Size = new System.Drawing.Size(144, 59);
             this.moveUpButtion.TabIndex = 2;
-            this.moveUpButtion.Text = "Up";
+            this.moveUpButtion.Text = "前";
             this.moveUpButtion.UseVisualStyleBackColor = true;
             this.moveUpButtion.Click += new System.EventHandler(this.moveUpButtion_Click);
             // 
@@ -207,7 +209,7 @@ namespace MovingCaptureDotNet
             this.moveLeftButton.Name = "moveLeftButton";
             this.moveLeftButton.Size = new System.Drawing.Size(144, 59);
             this.moveLeftButton.TabIndex = 2;
-            this.moveLeftButton.Text = "Left";
+            this.moveLeftButton.Text = "左";
             this.moveLeftButton.UseVisualStyleBackColor = true;
             this.moveLeftButton.Click += new System.EventHandler(this.moveLeftButton_Click);
             // 
@@ -217,7 +219,7 @@ namespace MovingCaptureDotNet
             this.moveRightButton.Name = "moveRightButton";
             this.moveRightButton.Size = new System.Drawing.Size(145, 59);
             this.moveRightButton.TabIndex = 2;
-            this.moveRightButton.Text = "Right";
+            this.moveRightButton.Text = "右";
             this.moveRightButton.UseVisualStyleBackColor = true;
             this.moveRightButton.Click += new System.EventHandler(this.moveRightButton_Click);
             // 
@@ -227,14 +229,14 @@ namespace MovingCaptureDotNet
             this.returnToZeroButton.Name = "returnToZeroButton";
             this.returnToZeroButton.Size = new System.Drawing.Size(144, 59);
             this.returnToZeroButton.TabIndex = 3;
-            this.returnToZeroButton.Text = "Zero";
+            this.returnToZeroButton.Text = "水平归零";
             this.returnToZeroButton.UseVisualStyleBackColor = true;
             this.returnToZeroButton.Click += new System.EventHandler(this.returnToZeroButton_Click_1);
             // 
             // moveSpeedInput
             // 
             this.moveSpeedInput.DecimalPlaces = 3;
-            this.moveSpeedInput.Location = new System.Drawing.Point(315, 3);
+            this.moveSpeedInput.Location = new System.Drawing.Point(340, 3);
             this.moveSpeedInput.Minimum = new decimal(new int[] {
             100,
             0,
@@ -249,23 +251,23 @@ namespace MovingCaptureDotNet
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(178, 24);
+            this.label1.Size = new System.Drawing.Size(226, 24);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Velocity(mm/s)";
+            this.label1.Text = "水平移动速度(mm/s)";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 107);
+            this.label2.Location = new System.Drawing.Point(3, 48);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(166, 24);
+            this.label2.Size = new System.Drawing.Size(202, 24);
             this.label2.TabIndex = 6;
-            this.label2.Text = "Step Size(mm)";
+            this.label2.Text = "水平移动步长(mm)";
             // 
             // stepSizeInput
             // 
             this.stepSizeInput.DecimalPlaces = 3;
-            this.stepSizeInput.Location = new System.Drawing.Point(315, 110);
+            this.stepSizeInput.Location = new System.Drawing.Point(340, 51);
             this.stepSizeInput.Minimum = new decimal(new int[] {
             100,
             0,
@@ -277,7 +279,7 @@ namespace MovingCaptureDotNet
             // 
             // exposureTimeInput
             // 
-            this.exposureTimeInput.Location = new System.Drawing.Point(315, 217);
+            this.exposureTimeInput.Location = new System.Drawing.Point(340, 99);
             this.exposureTimeInput.Maximum = new decimal(new int[] {
             9999000,
             0,
@@ -301,34 +303,34 @@ namespace MovingCaptureDotNet
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 214);
+            this.label3.Location = new System.Drawing.Point(3, 96);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(214, 24);
+            this.label3.Size = new System.Drawing.Size(154, 24);
             this.label3.TabIndex = 6;
-            this.label3.Text = "Exposure Time(ms)";
+            this.label3.Text = "曝光时间(ms)";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(3, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(202, 24);
+            this.label4.Size = new System.Drawing.Size(190, 24);
             this.label4.TabIndex = 6;
-            this.label4.Text = "Position X(mm): ";
+            this.label4.Text = "水平X坐标(mm): ";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(3, 37);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(202, 24);
+            this.label5.Size = new System.Drawing.Size(190, 24);
             this.label5.TabIndex = 6;
-            this.label5.Text = "Position Y(mm): ";
+            this.label5.Text = "水平Y坐标(mm): ";
             // 
             // positionXLable
             // 
             this.positionXLable.AutoSize = true;
-            this.positionXLable.Location = new System.Drawing.Point(335, 0);
+            this.positionXLable.Location = new System.Drawing.Point(340, 0);
             this.positionXLable.Name = "positionXLable";
             this.positionXLable.Size = new System.Drawing.Size(22, 24);
             this.positionXLable.TabIndex = 7;
@@ -352,7 +354,7 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(469, 321);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(506, 146);
             this.tableLayoutPanel2.TabIndex = 8;
             // 
             // tableLayoutPanel3
@@ -364,18 +366,18 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel3.Controls.Add(this.positionXLable, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.positionYLable, 1, 1);
             this.tableLayoutPanel3.Controls.Add(this.label5, 0, 1);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(965, 841);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(491, 1006);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(499, 75);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(506, 75);
             this.tableLayoutPanel3.TabIndex = 9;
             // 
             // positionYLable
             // 
             this.positionYLable.AutoSize = true;
-            this.positionYLable.Location = new System.Drawing.Point(335, 37);
+            this.positionYLable.Location = new System.Drawing.Point(340, 37);
             this.positionYLable.Name = "positionYLable";
             this.positionYLable.Size = new System.Drawing.Size(22, 24);
             this.positionYLable.TabIndex = 7;
@@ -386,14 +388,14 @@ namespace MovingCaptureDotNet
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(3, 43);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 24);
+            this.label6.Size = new System.Drawing.Size(154, 24);
             this.label6.TabIndex = 7;
-            this.label6.Text = "Start";
+            this.label6.Text = "拍照起始位置";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(127, 0);
+            this.label7.Location = new System.Drawing.Point(177, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 24);
             this.label7.TabIndex = 11;
@@ -401,21 +403,21 @@ namespace MovingCaptureDotNet
             // 
             // moveToStartPosition
             // 
-            this.moveToStartPosition.Location = new System.Drawing.Point(375, 46);
+            this.moveToStartPosition.Location = new System.Drawing.Point(425, 46);
             this.moveToStartPosition.Name = "moveToStartPosition";
-            this.moveToStartPosition.Size = new System.Drawing.Size(121, 35);
+            this.moveToStartPosition.Size = new System.Drawing.Size(81, 35);
             this.moveToStartPosition.TabIndex = 4;
-            this.moveToStartPosition.Text = "Go";
+            this.moveToStartPosition.Text = "移动";
             this.moveToStartPosition.UseVisualStyleBackColor = true;
             this.moveToStartPosition.Click += new System.EventHandler(this.moveToStartPosition_Click_1);
             // 
             // moveToEndPosition
             // 
-            this.moveToEndPosition.Location = new System.Drawing.Point(375, 89);
+            this.moveToEndPosition.Location = new System.Drawing.Point(425, 89);
             this.moveToEndPosition.Name = "moveToEndPosition";
-            this.moveToEndPosition.Size = new System.Drawing.Size(121, 35);
+            this.moveToEndPosition.Size = new System.Drawing.Size(81, 35);
             this.moveToEndPosition.TabIndex = 13;
-            this.moveToEndPosition.Text = "Go";
+            this.moveToEndPosition.Text = "移动";
             this.moveToEndPosition.UseVisualStyleBackColor = true;
             this.moveToEndPosition.Click += new System.EventHandler(this.moveToEndPosition_Click_1);
             // 
@@ -424,40 +426,40 @@ namespace MovingCaptureDotNet
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(3, 86);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(46, 24);
+            this.label11.Size = new System.Drawing.Size(154, 24);
             this.label11.TabIndex = 14;
-            this.label11.Text = "End";
+            this.label11.Text = "拍照终止位置";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(968, 1089);
+            this.label12.Location = new System.Drawing.Point(494, 1250);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(202, 24);
+            this.label12.Size = new System.Drawing.Size(106, 24);
             this.label12.TabIndex = 19;
-            this.label12.Text = "Capture Number: ";
+            this.label12.Text = "拍照数量";
             // 
             // captureNumberInput
             // 
-            this.captureNumberInput.Location = new System.Drawing.Point(1259, 1080);
+            this.captureNumberInput.Location = new System.Drawing.Point(785, 1241);
             this.captureNumberInput.Name = "captureNumberInput";
             this.captureNumberInput.Size = new System.Drawing.Size(79, 35);
             this.captureNumberInput.TabIndex = 7;
             // 
             // caputureStartButton
             // 
-            this.caputureStartButton.Location = new System.Drawing.Point(1357, 1080);
+            this.caputureStartButton.Location = new System.Drawing.Point(883, 1241);
             this.caputureStartButton.Name = "caputureStartButton";
-            this.caputureStartButton.Size = new System.Drawing.Size(104, 43);
+            this.caputureStartButton.Size = new System.Drawing.Size(117, 43);
             this.caputureStartButton.TabIndex = 20;
-            this.caputureStartButton.Text = "Caputre Start";
+            this.caputureStartButton.Text = "开始";
             this.caputureStartButton.UseVisualStyleBackColor = true;
             this.caputureStartButton.Click += new System.EventHandler(this.caputureStartButton_Click);
             // 
             // startX0Input
             // 
             this.startX0Input.DecimalPlaces = 3;
-            this.startX0Input.Location = new System.Drawing.Point(127, 46);
+            this.startX0Input.Location = new System.Drawing.Point(177, 46);
             this.startX0Input.Maximum = new decimal(new int[] {
             70,
             0,
@@ -475,7 +477,7 @@ namespace MovingCaptureDotNet
             // startY0Input
             // 
             this.startY0Input.DecimalPlaces = 3;
-            this.startY0Input.Location = new System.Drawing.Point(251, 46);
+            this.startY0Input.Location = new System.Drawing.Point(307, 46);
             this.startY0Input.Maximum = new decimal(new int[] {
             70,
             0,
@@ -487,13 +489,13 @@ namespace MovingCaptureDotNet
             0,
             -2147483648});
             this.startY0Input.Name = "startY0Input";
-            this.startY0Input.Size = new System.Drawing.Size(118, 35);
+            this.startY0Input.Size = new System.Drawing.Size(112, 35);
             this.startY0Input.TabIndex = 21;
             // 
             // endY1Input
             // 
             this.endY1Input.DecimalPlaces = 3;
-            this.endY1Input.Location = new System.Drawing.Point(251, 89);
+            this.endY1Input.Location = new System.Drawing.Point(307, 89);
             this.endY1Input.Maximum = new decimal(new int[] {
             70,
             0,
@@ -505,13 +507,13 @@ namespace MovingCaptureDotNet
             0,
             -2147483648});
             this.endY1Input.Name = "endY1Input";
-            this.endY1Input.Size = new System.Drawing.Size(118, 35);
+            this.endY1Input.Size = new System.Drawing.Size(112, 35);
             this.endY1Input.TabIndex = 21;
             // 
             // endX1Input
             // 
             this.endX1Input.DecimalPlaces = 3;
-            this.endX1Input.Location = new System.Drawing.Point(127, 89);
+            this.endX1Input.Location = new System.Drawing.Point(177, 89);
             this.endX1Input.Maximum = new decimal(new int[] {
             70,
             0,
@@ -528,18 +530,18 @@ namespace MovingCaptureDotNet
             // 
             // captureProgressBar
             // 
-            this.captureProgressBar.Location = new System.Drawing.Point(965, 1137);
+            this.captureProgressBar.Location = new System.Drawing.Point(491, 1298);
             this.captureProgressBar.Name = "captureProgressBar";
-            this.captureProgressBar.Size = new System.Drawing.Size(496, 27);
+            this.captureProgressBar.Size = new System.Drawing.Size(509, 27);
             this.captureProgressBar.TabIndex = 22;
             // 
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.ColumnCount = 4;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.26854F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.6513F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.24649F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.83367F));
             this.tableLayoutPanel4.Controls.Add(this.label6, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.label11, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.endY1Input, 2, 2);
@@ -551,13 +553,13 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel4.Controls.Add(this.moveToStartPosition, 3, 1);
             this.tableLayoutPanel4.Controls.Add(this.label7, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.label13, 2, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(965, 936);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(491, 1097);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 3;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(499, 131);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(509, 131);
             this.tableLayoutPanel4.TabIndex = 23;
             // 
             // label14
@@ -571,7 +573,7 @@ namespace MovingCaptureDotNet
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(251, 0);
+            this.label13.Location = new System.Drawing.Point(307, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(70, 24);
             this.label13.TabIndex = 11;
@@ -601,7 +603,8 @@ namespace MovingCaptureDotNet
             this.groupBox1.Size = new System.Drawing.Size(1027, 805);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Move Commands";
+            this.groupBox1.Text = "移动命令";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // commandApplyProgressBar
             // 
@@ -618,7 +621,7 @@ namespace MovingCaptureDotNet
             this.groupBox4.Size = new System.Drawing.Size(481, 137);
             this.groupBox4.TabIndex = 32;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Start Position";
+            this.groupBox4.Text = "开始位置";
             // 
             // tableLayoutPanel7
             // 
@@ -708,7 +711,7 @@ namespace MovingCaptureDotNet
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(117, 33);
             this.button7.TabIndex = 4;
-            this.button7.Text = "Go";
+            this.button7.Text = "移动至此";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.moveToStartPosition_Click_1);
             // 
@@ -718,7 +721,7 @@ namespace MovingCaptureDotNet
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(496, 36);
             this.button5.TabIndex = 31;
-            this.button5.Text = "Start !";
+            this.button5.Text = "开始采集";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
@@ -728,7 +731,7 @@ namespace MovingCaptureDotNet
             this.motionRemoveButton.Name = "motionRemoveButton";
             this.motionRemoveButton.Size = new System.Drawing.Size(496, 36);
             this.motionRemoveButton.TabIndex = 30;
-            this.motionRemoveButton.Text = "Remove";
+            this.motionRemoveButton.Text = "移除移动";
             this.motionRemoveButton.UseVisualStyleBackColor = true;
             this.motionRemoveButton.Click += new System.EventHandler(this.motionRemoveButton_Click);
             // 
@@ -740,7 +743,7 @@ namespace MovingCaptureDotNet
             this.groupBox3.Size = new System.Drawing.Size(496, 174);
             this.groupBox3.TabIndex = 29;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Polar Coordinate Vector";
+            this.groupBox3.Text = "极坐标移动";
             // 
             // tableLayoutPanel6
             // 
@@ -769,14 +772,36 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel6.Size = new System.Drawing.Size(463, 144);
             this.tableLayoutPanel6.TabIndex = 26;
             // 
+            // deltaZInputPolar
+            // 
+            this.deltaZInputPolar.DecimalPlaces = 3;
+            this.deltaZInputPolar.Location = new System.Drawing.Point(115, 86);
+            this.deltaZInputPolar.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.deltaZInputPolar.Name = "deltaZInputPolar";
+            this.deltaZInputPolar.Size = new System.Drawing.Size(120, 35);
+            this.deltaZInputPolar.TabIndex = 29;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(3, 83);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(106, 24);
+            this.label25.TabIndex = 29;
+            this.label25.Text = "Δz (mm)";
+            // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(241, 41);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(82, 24);
+            this.label16.Size = new System.Drawing.Size(58, 24);
             this.label16.TabIndex = 29;
-            this.label16.Text = "Action";
+            this.label16.Text = "指令";
             // 
             // label17
             // 
@@ -789,17 +814,17 @@ namespace MovingCaptureDotNet
             // 
             // addPolarCoordButton
             // 
-            this.addPolarCoordButton.Location = new System.Drawing.Point(329, 44);
+            this.addPolarCoordButton.Location = new System.Drawing.Point(305, 44);
             this.addPolarCoordButton.Name = "addPolarCoordButton";
             this.addPolarCoordButton.Size = new System.Drawing.Size(120, 36);
             this.addPolarCoordButton.TabIndex = 27;
-            this.addPolarCoordButton.Text = "Add";
+            this.addPolarCoordButton.Text = "添加";
             this.addPolarCoordButton.UseVisualStyleBackColor = true;
             this.addPolarCoordButton.Click += new System.EventHandler(this.addPolarCoordButton_Click);
             // 
             // polarCoordStepsInput
             // 
-            this.polarCoordStepsInput.Location = new System.Drawing.Point(329, 3);
+            this.polarCoordStepsInput.Location = new System.Drawing.Point(305, 3);
             this.polarCoordStepsInput.Name = "polarCoordStepsInput";
             this.polarCoordStepsInput.Size = new System.Drawing.Size(120, 35);
             this.polarCoordStepsInput.TabIndex = 27;
@@ -831,9 +856,9 @@ namespace MovingCaptureDotNet
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(241, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(70, 24);
+            this.label19.Size = new System.Drawing.Size(58, 24);
             this.label19.TabIndex = 27;
-            this.label19.Text = "Steps";
+            this.label19.Text = "步数";
             // 
             // deltaRInput
             // 
@@ -856,7 +881,7 @@ namespace MovingCaptureDotNet
             this.groupBox2.Size = new System.Drawing.Size(496, 176);
             this.groupBox2.TabIndex = 28;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Rectangular Coordinate Vector";
+            this.groupBox2.Text = "直角坐标移动";
             // 
             // tableLayoutPanel5
             // 
@@ -885,14 +910,36 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel5.Size = new System.Drawing.Size(463, 135);
             this.tableLayoutPanel5.TabIndex = 26;
             // 
+            // deltaZInputRect
+            // 
+            this.deltaZInputRect.DecimalPlaces = 3;
+            this.deltaZInputRect.Location = new System.Drawing.Point(115, 86);
+            this.deltaZInputRect.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.deltaZInputRect.Name = "deltaZInputRect";
+            this.deltaZInputRect.Size = new System.Drawing.Size(120, 35);
+            this.deltaZInputRect.TabIndex = 28;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(3, 83);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(106, 24);
+            this.label18.TabIndex = 28;
+            this.label18.Text = "Δz (mm)";
+            // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(241, 41);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(82, 24);
+            this.label15.Size = new System.Drawing.Size(58, 24);
             this.label15.TabIndex = 29;
-            this.label15.Text = "Action";
+            this.label15.Text = "指令";
             // 
             // label8
             // 
@@ -905,17 +952,17 @@ namespace MovingCaptureDotNet
             // 
             // addRectCoordButton
             // 
-            this.addRectCoordButton.Location = new System.Drawing.Point(329, 44);
+            this.addRectCoordButton.Location = new System.Drawing.Point(305, 44);
             this.addRectCoordButton.Name = "addRectCoordButton";
             this.addRectCoordButton.Size = new System.Drawing.Size(120, 36);
             this.addRectCoordButton.TabIndex = 27;
-            this.addRectCoordButton.Text = "Add";
+            this.addRectCoordButton.Text = "添加";
             this.addRectCoordButton.UseVisualStyleBackColor = true;
             this.addRectCoordButton.Click += new System.EventHandler(this.addRectCoordButton_Click);
             // 
             // rectCoordStepsInput
             // 
-            this.rectCoordStepsInput.Location = new System.Drawing.Point(329, 3);
+            this.rectCoordStepsInput.Location = new System.Drawing.Point(305, 3);
             this.rectCoordStepsInput.Name = "rectCoordStepsInput";
             this.rectCoordStepsInput.Size = new System.Drawing.Size(120, 35);
             this.rectCoordStepsInput.TabIndex = 27;
@@ -947,9 +994,9 @@ namespace MovingCaptureDotNet
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(241, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(70, 24);
+            this.label10.Size = new System.Drawing.Size(58, 24);
             this.label10.TabIndex = 27;
-            this.label10.Text = "Steps";
+            this.label10.Text = "步数";
             // 
             // deltaYInput
             // 
@@ -1020,9 +1067,9 @@ namespace MovingCaptureDotNet
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(153, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(130, 48);
+            this.label20.Size = new System.Drawing.Size(106, 48);
             this.label20.TabIndex = 14;
-            this.label20.Text = "Step Size [mm]";
+            this.label20.Text = "高度步长[mm]";
             // 
             // HeightDownButton
             // 
@@ -1030,7 +1077,7 @@ namespace MovingCaptureDotNet
             this.HeightDownButton.Name = "HeightDownButton";
             this.HeightDownButton.Size = new System.Drawing.Size(144, 61);
             this.HeightDownButton.TabIndex = 2;
-            this.HeightDownButton.Text = "Down";
+            this.HeightDownButton.Text = "下";
             this.HeightDownButton.UseVisualStyleBackColor = true;
             this.HeightDownButton.Click += new System.EventHandler(this.HeightDownButton_Click);
             // 
@@ -1040,7 +1087,7 @@ namespace MovingCaptureDotNet
             this.HeightZeroButton.Name = "HeightZeroButton";
             this.HeightZeroButton.Size = new System.Drawing.Size(144, 59);
             this.HeightZeroButton.TabIndex = 3;
-            this.HeightZeroButton.Text = "Zero";
+            this.HeightZeroButton.Text = "高度归零";
             this.HeightZeroButton.UseVisualStyleBackColor = true;
             this.HeightZeroButton.Click += new System.EventHandler(this.HeightZeroButton_Click);
             // 
@@ -1068,7 +1115,7 @@ namespace MovingCaptureDotNet
             this.HeightUpButton.Name = "HeightUpButton";
             this.HeightUpButton.Size = new System.Drawing.Size(144, 59);
             this.HeightUpButton.TabIndex = 2;
-            this.HeightUpButton.Text = "Up";
+            this.HeightUpButton.Text = "上";
             this.HeightUpButton.UseVisualStyleBackColor = true;
             this.HeightUpButton.Click += new System.EventHandler(this.HeightUpButton_Click);
             // 
@@ -1077,69 +1124,35 @@ namespace MovingCaptureDotNet
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(153, 65);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(142, 48);
+            this.label21.Size = new System.Drawing.Size(118, 48);
             this.label21.TabIndex = 14;
-            this.label21.Text = "Current Height [mm]";
+            this.label21.Text = "当前高度 [mm]";
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(1489, 853);
+            this.pictureBox1.Location = new System.Drawing.Point(7, 32);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1004, 332);
+            this.pictureBox1.Size = new System.Drawing.Size(804, 443);
             this.pictureBox1.TabIndex = 27;
             this.pictureBox1.TabStop = false;
             // 
-            // label18
+            // groupBox5
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(3, 83);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(106, 24);
-            this.label18.TabIndex = 28;
-            this.label18.Text = "Δz (mm)";
-            // 
-            // deltaZInputRect
-            // 
-            this.deltaZInputRect.DecimalPlaces = 3;
-            this.deltaZInputRect.Location = new System.Drawing.Point(115, 86);
-            this.deltaZInputRect.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.deltaZInputRect.Name = "deltaZInputRect";
-            this.deltaZInputRect.Size = new System.Drawing.Size(120, 35);
-            this.deltaZInputRect.TabIndex = 28;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(3, 83);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(106, 24);
-            this.label25.TabIndex = 29;
-            this.label25.Text = "Δz (mm)";
-            // 
-            // deltaZInputPolar
-            // 
-            this.deltaZInputPolar.DecimalPlaces = 3;
-            this.deltaZInputPolar.Location = new System.Drawing.Point(115, 86);
-            this.deltaZInputPolar.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.deltaZInputPolar.Name = "deltaZInputPolar";
-            this.deltaZInputPolar.Size = new System.Drawing.Size(120, 35);
-            this.deltaZInputPolar.TabIndex = 29;
+            this.groupBox5.Controls.Add(this.pictureBox1);
+            this.groupBox5.Location = new System.Drawing.Point(1024, 843);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(818, 482);
+            this.groupBox5.TabIndex = 28;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "重建3D图像";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2545, 1399);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tableLayoutPanel4);
             this.Controls.Add(this.captureProgressBar);
@@ -1178,12 +1191,14 @@ namespace MovingCaptureDotNet
             this.groupBox3.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deltaZInputPolar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.polarCoordStepsInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.thetaInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaRInput)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deltaZInputRect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rectCoordStepsInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaXInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deltaYInput)).EndInit();
@@ -1192,8 +1207,7 @@ namespace MovingCaptureDotNet
             ((System.ComponentModel.ISupportInitialize)(this.currentHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightStepSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deltaZInputRect)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deltaZInputPolar)).EndInit();
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1286,6 +1300,7 @@ namespace MovingCaptureDotNet
         private Label label18;
         private NumericUpDown deltaZInputPolar;
         private Label label25;
+        private GroupBox groupBox5;
     }
 
 
