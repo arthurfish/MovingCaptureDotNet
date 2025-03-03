@@ -69,6 +69,7 @@ namespace MovingCaptureDotNet
                 total += mot.Steps;
             }
             var counter = 0;
+            var waited = false;
             foreach(IMotion mot in motions)
             {
                 for (int i = 0; i < mot.Steps; i++)
@@ -81,6 +82,11 @@ namespace MovingCaptureDotNet
 //                    while (!isAvaliable()) ;
 //                    Console.WriteLine("Avaliable.");
                     System.Threading.Thread.Sleep(500);
+                    if (!waited)
+                    {
+                        System.Threading.Thread.Sleep(5000);
+                        waited = true;
+                    }
                     takePhoto();
                     System.Threading.Thread.Sleep(500);
 //                    Console.WriteLine("Photo took");

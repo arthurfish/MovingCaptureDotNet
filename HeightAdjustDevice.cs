@@ -69,7 +69,7 @@ namespace MovingCaptureDotNet
         public void IncrementMove(float deltaZ)
         {
             _position += deltaZ;
-            _device.MoCtrCard_MCrlAxisAbsMove((byte)AxisId, (float)_position, 10, 10);
+            _device.MoCtrCard_MCrlAxisAbsMove((byte)AxisId, (float)_position, 2, 2);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Position))); Position += deltaZ;
         }
 
