@@ -70,28 +70,17 @@ namespace MovingCaptureDotNet
             }
             var counter = 0;
             var waited = false;
+
             foreach(IMotion mot in motions)
             {
                 for (int i = 0; i < mot.Steps; i++)
                 {
-
-                    move(mot);
-//                    Console.WriteLine("Moved.");
                     setProgress((counter+1.0)/total);
-  //                  Console.WriteLine("Progress Set.");
-//                    while (!isAvaliable()) ;
-//                    Console.WriteLine("Avaliable.");
-                    System.Threading.Thread.Sleep(500);
-                    if (!waited)
-                    {
-                        System.Threading.Thread.Sleep(5000);
-                        waited = true;
-                    }
                     takePhoto();
-                    System.Threading.Thread.Sleep(500);
-//                    Console.WriteLine("Photo took");
+                    System.Threading.Thread.Sleep(750);
+                    move(mot);
+                    System.Threading.Thread.Sleep(750);
                     counter++;
-
                 }
             }
         }

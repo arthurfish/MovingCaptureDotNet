@@ -138,17 +138,24 @@ namespace MovingCaptureDotNet
 
         public PositioningPlatform(string ipAddress = "192.168.0.11")
         {
-            var ret = zmcaux.ZAux_OpenEth(ipAddress, out deviceHandle);
-            if (ret != 0) throw new Exception("Can not connect to PLATFORM.");
-            zmcaux.ZAux_Direct_SetAtype(deviceHandle, 0, 65);
-            zmcaux.ZAux_Direct_SetUnits(deviceHandle, 0, 20000);
-            zmcaux.ZAux_Direct_SetAccel(deviceHandle, 0, 1000);
-            zmcaux.ZAux_Direct_SetDecel(deviceHandle, 0, 1000);
-            zmcaux.ZAux_Direct_SetSpeed(deviceHandle, 0, 50);
-            zmcaux.ZAux_Direct_SetAxisEnable(deviceHandle, xAxis, 1);
-            zmcaux.ZAux_Direct_SetAxisEnable(deviceHandle, yAxis, 1);
+            try
+            {
+                var ret = zmcaux.ZAux_OpenEth(ipAddress, out deviceHandle);
+                if (ret != 0) throw new Exception("Can not connect to PLATFORM.");
+                zmcaux.ZAux_Direct_SetAtype(deviceHandle, 0, 65);
+                zmcaux.ZAux_Direct_SetUnits(deviceHandle, 0, 20000);
+                zmcaux.ZAux_Direct_SetAccel(deviceHandle, 0, 1000);
+                zmcaux.ZAux_Direct_SetDecel(deviceHandle, 0, 1000);
+                zmcaux.ZAux_Direct_SetSpeed(deviceHandle, 0, 50);
+                zmcaux.ZAux_Direct_SetAxisEnable(deviceHandle, xAxis, 1);
+                zmcaux.ZAux_Direct_SetAxisEnable(deviceHandle, yAxis, 1);
 
-
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            
         }
     }
 }

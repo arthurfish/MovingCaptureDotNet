@@ -28,8 +28,14 @@ namespace MovingCaptureDotNet
             positioningPlatform = new PositioningPlatform();
             heightAdjustDevice = new HeightAdjustDevice();
             heightAdjustDevice.Position = 0;
-            camera = new Camera(pictureBox2);
-            camera.startGrabing();
+            try
+            {
+                camera = new Camera(pictureBox2);
+                camera.startGrabing();
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.StackTrace);
+            }
             this.pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
             this.FormClosed += async (sender, e) =>
             {
@@ -88,6 +94,10 @@ namespace MovingCaptureDotNet
             positionYLable.Invoke(new Action(() =>
             {
                 positionYLable.Text = $"{positioningPlatform.position.y:F2}";
+            }));
+            currentHeight.Invoke(new Action(() =>
+            {
+//                  currentHeight.Value = (decimal)heightAdjustDevice.Position;
             }));
             var image = camera.getImage();
             if (image != null)
@@ -154,6 +164,7 @@ namespace MovingCaptureDotNet
         private void moveToStartPosition_Click_1(object sender, EventArgs e)
         {
             positioningPlatform.position = (positioningPlatform.startX0, positioningPlatform.startY0);
+            heightAdjustDevice.Position = (float)startZ0Input.Value;
         }
 
         private void positionXLable_Click(object sender, EventArgs e)
@@ -223,6 +234,8 @@ namespace MovingCaptureDotNet
             var saver = new ImageSaver();
             var task = Task.Run(() =>
             {
+                positioningPlatform.position = ((float)startX0Input.Value, (float)startY0Input.Value);
+                heightAdjustDevice.Position = (float)startZ0Input.Value;
                 MotionUtils.applyMotions(
                     commandListBox.Items.Cast<IMotion>(),
                     motion => { 
@@ -260,7 +273,7 @@ namespace MovingCaptureDotNet
 
         private void HeightUpButton_Click(object sender, EventArgs e)
         {
-            heightAdjustDevice.Position += heightAdjustDevice.StepSize;
+            heightAdjustDevice.Position = heightAdjustDevice._position + heightAdjustDevice.StepSize;
         }
 
         private void HeightZeroButton_Click(object sender, EventArgs e)
@@ -270,12 +283,22 @@ namespace MovingCaptureDotNet
 
         private void HeightDownButton_Click(object sender, EventArgs e)
         {
-            heightAdjustDevice.Position -= heightAdjustDevice.StepSize;
+            heightAdjustDevice.Position = heightAdjustDevice._position - heightAdjustDevice.StepSize;
         }
 
         private void returnToZeroButton_Click_1(object sender, EventArgs e)
         {
             positioningPlatform.position = (0, 0);
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void currentHeight_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

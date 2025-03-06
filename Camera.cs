@@ -66,28 +66,40 @@ namespace MovingCaptureDotNet
 
         public Camera(PictureBox pictureBox)
         {
-            this.pictureBox = pictureBox;
-            Console.WriteLine("Scanning Camera...");
+            try
+            {
+                this.pictureBox = pictureBox;
+                Console.WriteLine("Scanning Camera...");
 
-            SDKSystem.Initialize();
-            List<IDeviceInfo> deviceInfoList = null;
-            var ret = DeviceEnumerator.EnumDevices(DeviceTLayerType.MvGigEDevice, out deviceInfoList);
-            if (ret != MvError.MV_OK || deviceInfoList.Count != 1)
-                throw new Exception($"Camera Init Error: Can not get the camera.");
-            var device = DeviceFactory.CreateDevice(deviceInfoList[0]) as IGigEDevice
-                ?? throw new Exception("Cast to GigE Error.");
-            infoCameraError(device.Open());
+                SDKSystem.Initialize();
+                List<IDeviceInfo> deviceInfoList = null;
+                var ret = DeviceEnumerator.EnumDevices(DeviceTLayerType.MvGigEDevice, out deviceInfoList);
+                if (ret != MvError.MV_OK || deviceInfoList.Count != 1)
+                    throw new Exception($"Camera Init Error: Can not get the camera.");
+                var device = DeviceFactory.CreateDevice(deviceInfoList[0]) as IGigEDevice
+                    ?? throw new Exception("Cast to GigE Error.");
+                infoCameraError(device.Open());
 
-            var packetSize = -1;
-            infoCameraError(device.GetOptimalPacketSize(out packetSize));
-            infoCameraError(device.Parameters.SetIntValue("GevSCPSPacketSize", packetSize));
-            device.StreamGrabber.SetImageNodeNum(5);
-            this.device = device;
-            Console.WriteLine("Camera Got.");
+                var packetSize = -1;
+                infoCameraError(device.GetOptimalPacketSize(out packetSize));
+                infoCameraError(device.Parameters.SetIntValue("GevSCPSPacketSize", packetSize));
+                device.StreamGrabber.SetImageNodeNum(5);
+                this.device = device;
+                Console.WriteLine("Camera Got.");
+            }
+            catch (Exception ex)
+            {
+//              disposeCamera();
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         public void startGrabing()
         {
+            if (this.device ==null)
+            {
+                return;
+            }
             EventHandler<FrameGrabbedEventArgs> handler = (sender, e) =>
             {
                 pictureBox.Invoke(new Action(() =>

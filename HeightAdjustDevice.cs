@@ -7,6 +7,7 @@ using SerialPortLibrary;
 using System.IO.Ports;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Diagnostics;
 
 
 
@@ -43,15 +44,22 @@ namespace MovingCaptureDotNet
             return result == 1;
         }
         
-        private double _position = 0;
+        public double _position = 0;
         public double Position
         {
             get {
-                float[] temp = new float[1];
-                _device.MoCtrCard_GetAxisPos((byte)AxisId, temp);
-                _position = temp[0];
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Position)));
-                Console.WriteLine($"Height(get): {_position}");
+                try
+                {
+                    float[] temp = new float[1];
+                    _device.MoCtrCard_GetAxisPos((byte)AxisId, temp);
+                    _position = temp[0];
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Position)));
+                    Console.WriteLine($"Height(get): {_position}");
+                }
+                catch
+                {
+
+                }
                 return _position;
             }
             set
@@ -59,7 +67,7 @@ namespace MovingCaptureDotNet
                 if (value != _position)
                 {
                     _position = value;
-                    _device.MoCtrCard_MCrlAxisAbsMove((byte)AxisId, (float)_position, 10, 10);
+                    _device.MoCtrCard_MCrlAxisAbsMove((byte)AxisId, (float)_position, 5, 1);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Position)));
                     Console.WriteLine($"Height(set): {_position}");
                 }
@@ -68,9 +76,7 @@ namespace MovingCaptureDotNet
 
         public void IncrementMove(float deltaZ)
         {
-            _position += deltaZ;
-            _device.MoCtrCard_MCrlAxisAbsMove((byte)AxisId, (float)_position, 2, 2);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Position))); Position += deltaZ;
+            Position = Position + deltaZ;
         }
 
         public HeightAdjustDevice()
@@ -87,7 +93,9 @@ namespace MovingCaptureDotNet
             }
             if(!openSerialPortSuccess)
             {
-                throw new Exception("Can NOT open the height adjust motor.");
+                //                throw new Exception("Can NOT open the height adjust motor.");
+                Trace.WriteLine("Can not open Height Device");
+
             }
             
         }
