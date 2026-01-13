@@ -1,22 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
+using MovingCaptureDotNet.Hardware.Implementations;
+using MovingCaptureDotNet.Services;
 
 namespace MovingCaptureDotNet
 {
     internal static class Program
     {
-        /// <summary>
-        /// 应用程序的主入口点。
-        /// </summary>
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            // Composition Root
+            var motion = new ZMotionController();
+            try { motion.Connect("192.168.0.11"); } 
+            catch { Trace.WriteLine("[PLATFORM] Can not connect.");/* Log or Ignore */ }
+
+            var height = new SerialHeightAdjuster();
+            try { if (!height.Connect()) Trace.WriteLine("Height Connect Fail"); }
+            catch { }
+
+            var camera = new HikVisionCamera();
+            try { 
+                camera.Initialize();
+            }
+            catch {
+                Trace.WriteLine("[CAMERA] Can not connect.");
+            }
+
+            var service = new CaptureWorkflowService(motion, camera, height);
+
+            var form = new Form1(motion, camera, height, service);
+
+            Application.Run(form);
         }
     }
 }

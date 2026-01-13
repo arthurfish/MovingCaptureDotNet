@@ -4,66 +4,167 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Timers;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Runtime.CompilerServices;
 using System.IO;
-
-
+using MovingCaptureDotNet.Domain.Models;
+using MovingCaptureDotNet.Hardware.Abstractions;
+using MovingCaptureDotNet.Hardware.Implementations;
+using MovingCaptureDotNet.Services;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MovingCaptureDotNet
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, INotifyPropertyChanged
     {
-        const int GRABBING_INTERVAL_MILLISECOND = 200;
-        const int CAPTURE_DELAY_MILLISECOND = 1000;
+        const int GRABBING_INTERVAL_MILLISECOND = 100; // Updated for smoother UI
 
-        public Form1()
+        private readonly IMotionController _motionController;
+        private readonly IHeightAdjuster _heightAdjuster;
+        private readonly ICamera _camera;
+        private readonly ICaptureWorkflowService _captureService;
+
+        private System.Timers.Timer _timer;
+
+        // View Model Properties
+        private float _motionStepSize = 5;
+        public float MotionStepSize
+        {
+            get => _motionStepSize;
+            set { _motionStepSize = value; OnPropertyChanged(nameof(MotionStepSize)); }
+        }
+
+        private float _startX0;
+        public float StartX0
+        {
+            get => _startX0;
+            set { _startX0 = value; OnPropertyChanged(nameof(StartX0)); }
+        }
+
+        private float _startY0;
+        public float StartY0
+        {
+            get => _startY0;
+            set { _startY0 = value; OnPropertyChanged(nameof(StartY0)); }
+        }
+
+        private float _endX1;
+        public float EndX1
+        {
+            get => _endX1;
+            set { _endX1 = value; OnPropertyChanged(nameof(EndX1)); }
+        }
+
+        private float _endY1;
+        public float EndY1
+        {
+            get => _endY1;
+            set { _endY1 = value; OnPropertyChanged(nameof(EndY1)); }
+        }
+        
+        private bool _isCapturing = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        // Default constructor for Designer support (if needed) - but we use DI mostly
+        // Ideally we shouldn't have this if we enforce DI, but WinForms designer sometimes needs it.
+        // We will make the DI constructor the main one.
+        public Form1(IMotionController motionController, ICamera camera, IHeightAdjuster heightAdjuster, ICaptureWorkflowService captureService)
         {
             InitializeComponent();
-            this.Width = 1600;
-            this.Height = 700;
-            positioningPlatform = new PositioningPlatform();
-            heightAdjustDevice = new HeightAdjustDevice();
-            heightAdjustDevice.Position = 0;
-            try
+            _motionController = motionController;
+            _camera = camera;
+            _heightAdjuster = heightAdjuster;
+            _captureService = captureService;
+
+            this.Width = 1500;
+            this.Height = 800;
+
+            InitializeBindings();
+            InitializeHardwareAsync(); // Fire and forget specific init if needed, or caller handled it.
+            
+            // Timer for Live View
+            _timer = new System.Timers.Timer(GRABBING_INTERVAL_MILLISECOND);
+            _timer.Elapsed += (s, e) => onTimerTick();
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
+
+            this.FormClosed += Form1_FormClosed;
+        }
+
+        // Fallback for designer?
+        public Form1() { InitializeComponent(); } 
+
+        private void InitializeBindings()
+        {
+            if (_camera != null)
             {
-                camera = new Camera(pictureBox2);
-                camera.startGrabing();
+                exposureTimeInput.DataBindings.Add("Value", _camera, nameof(_camera.ExposureTime), true, DataSourceUpdateMode.OnPropertyChanged);
+                captureNumberInput.DataBindings.Add("Value", _camera, nameof(_camera.CaptureNumber), true, DataSourceUpdateMode.OnPropertyChanged);
             }
-            catch (Exception ex) {
-                Console.WriteLine(ex.StackTrace);
-            }
-            this.pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
-            this.FormClosed += async (sender, e) =>
+
+            if (_motionController != null)
             {
-                Console.WriteLine("Will release the camera.");
-                camera.disposeCamera();
-            };
-            timer = new System.Timers.Timer(GRABBING_INTERVAL_MILLISECOND);
-            timer.Elapsed += (s, e) => onTimerTick();
-            timer.AutoReset = true;
-            timer.Enabled = true;
-            exposureTimeInput.DataBindings.Add("Value", camera, nameof(camera.exposureTime), true, DataSourceUpdateMode.OnPropertyChanged);
-            moveSpeedInput.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.velocity), true, DataSourceUpdateMode.OnPropertyChanged);
-            stepSizeInput.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.stepSize), true, DataSourceUpdateMode.OnPropertyChanged);
-            startX0Input.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.startX0), true, DataSourceUpdateMode.OnPropertyChanged);
-            startY0Input.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.startY0), true, DataSourceUpdateMode.OnPropertyChanged);
-            endX1Input.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.endX1), true, DataSourceUpdateMode.OnPropertyChanged);
-            endY1Input.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.endY1), true, DataSourceUpdateMode.OnPropertyChanged);
-            captureNumberInput.DataBindings.Add("Value", camera, nameof(camera.captureNumber), true, DataSourceUpdateMode.OnPropertyChanged);
+                moveSpeedInput.DataBindings.Add("Value", _motionController, nameof(_motionController.Velocity), true, DataSourceUpdateMode.OnPropertyChanged);
+            }
+
+            // Local bindings
+            stepSizeInput.DataBindings.Add("Value", this, nameof(MotionStepSize), true, DataSourceUpdateMode.OnPropertyChanged);
+            
+            startX0Input.DataBindings.Add("Value", this, nameof(StartX0), true, DataSourceUpdateMode.OnPropertyChanged);
+            startY0Input.DataBindings.Add("Value", this, nameof(StartY0), true, DataSourceUpdateMode.OnPropertyChanged);
+            
+            endX1Input.DataBindings.Add("Value", this, nameof(EndX1), true, DataSourceUpdateMode.OnPropertyChanged);
+            endY1Input.DataBindings.Add("Value", this, nameof(EndY1), true, DataSourceUpdateMode.OnPropertyChanged);
+
+            startX0InputCopy.DataBindings.Add("Value", this, nameof(StartX0), true, DataSourceUpdateMode.OnPropertyChanged);
+            startY0InputCopy.DataBindings.Add("Value", this, nameof(StartY0), true, DataSourceUpdateMode.OnPropertyChanged);
+
+            if (_heightAdjuster != null)
+            {
+                heightStepSize.DataBindings.Add("Value", _heightAdjuster, nameof(_heightAdjuster.StepSize), true, DataSourceUpdateMode.OnPropertyChanged);
+                currentHeight.DataBindings.Add("Value", _heightAdjuster, nameof(_heightAdjuster.ExpectedPosition), true, DataSourceUpdateMode.OnPropertyChanged);
+            }
 
             commandListBox.DisplayMember = "Description";
             commandListBox.ValueMember = "Id";
-            startX0InputCopy.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.startX0), true, DataSourceUpdateMode.OnPropertyChanged);
-            startY0InputCopy.DataBindings.Add("Value", positioningPlatform, nameof(positioningPlatform.startY0), true, DataSourceUpdateMode.OnPropertyChanged);
+            button5.Enabled = true; 
+        }
 
-            heightStepSize.DataBindings.Add("Value", heightAdjustDevice, nameof(heightAdjustDevice.StepSize), true, DataSourceUpdateMode.OnPropertyChanged);
-            currentHeight.DataBindings.Add("Value", heightAdjustDevice, nameof(heightAdjustDevice.Position), true, DataSourceUpdateMode.OnPropertyChanged);
-            button5.Enabled = (commandListBox.Items.Count >= 1);
+        private async void InitializeHardwareAsync()
+        {
+            // Hardware init is mostly done in Program.cs, but we can do extra setup here.
+            // Example: Start Grabbing
+            if (_camera != null)
+            {
+                try 
+                {
+                    _camera.StartGrabbing(); 
+                }
+                catch(Exception ex) 
+                {
+                    MessageBox.Show($"Camera Start Failed: {ex.Message}");
+                }
+            }
+        }
 
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Console.WriteLine("Releasing hardware...");
+            _camera?.Dispose();
+
+            _timer.Stop();
+            
+            // _motionController doesn't implement IDisposable but maybe should? 
+            // original code didn't dispose it.
+            
+            // _heightAdjuster needed disconnect?
+            (_heightAdjuster as SerialHeightAdjuster)?.Disconnect();
         }
 
         private Dictionary<String, (int x, int y)> directions = new Dictionary<string, (int, int)>
@@ -76,229 +177,196 @@ namespace MovingCaptureDotNet
 
         private void moveHelper(String cmd)
         {
-            var dev = positioningPlatform;
-            var d = directions[cmd];
-            var s = dev.stepSize;
-            dev.incrementMove(d.x * s, d.y * s);
+            if (_motionController == null) return;
+            if (directions.ContainsKey(cmd))
+            {
+                var d = directions[cmd];
+                _motionController.MoveRelative(d.x * MotionStepSize, d.y * MotionStepSize);
+            }
         }
 
         private System.Timers.Timer timer;
-        
+
         private void onTimerTick()
         {
-            var _ = positioningPlatform.position;
-            positionXLable.Invoke(new Action(() =>
+            if (_isCapturing) return;
+
+            // Update UI on main thread
+            if (_motionController != null)
             {
-                positionXLable.Text = $"{positioningPlatform.position.x:F2}";
-            }));
-            positionYLable.Invoke(new Action(() =>
-            {
-                positionYLable.Text = $"{positioningPlatform.position.y:F2}";
-            }));
-            currentHeight.Invoke(new Action(() =>
-            {
-//                  currentHeight.Value = (decimal)heightAdjustDevice.Position;
-            }));
-            var image = camera.getImage();
-            if (image != null)
-            {
-                pictureBox2.Invoke(new Action(() =>
+                // Reading properties might be fast, but updating UI must be invoked
+                var pos = _motionController.Position;
+                try
                 {
-                    pictureBox2.Image = image;
-                }));
+                    BeginInvoke(new Action(() =>
+                    {
+                        positionXLable.Text = $"{pos.X:F2}";
+                        positionYLable.Text = $"{pos.Y:F2}";
+                    }));
+                }
+                catch { } // Ignore if form closing
+            }
+
+            if (_camera != null)
+            {
+                // GetImage might block or throw if busy
+                try
+                {
+                    var image = _camera.GetImage();
+                    if (image != null)
+                    {
+                        BeginInvoke(new Action(() =>
+                        {
+                            var old = pictureBox2.Image;
+                            pictureBox2.Image = image;
+                            if (old != null) old.Dispose();
+                        }));
+                    }
+                }
+                catch { }
             }
 
         }
 
-        private void moveUpButtion_Click(object sender, EventArgs e)
-        {
-            moveHelper("up");
-        }
+        private void moveUpButtion_Click(object sender, EventArgs e) => moveHelper("up");
+        private void moveDownButton_Click(object sender, EventArgs e) => moveHelper("down");
+        private void moveLeftButton_Click(object sender, EventArgs e) => moveHelper("left");
+        private void moveRightButton_Click(object sender, EventArgs e) => moveHelper("right");
 
-        private void moveDownButton_Click(object sender, EventArgs e)
-        {
-            moveHelper("down");
-        }
-
-        private void moveLeftButton_Click(object sender, EventArgs e)
-        {
-            moveHelper("left");
-        }
-
-        private void moveRightButton_Click(object sender, EventArgs e)
-        {
-            moveHelper("right");
-        }
-
-        private void returnToZeroButton_Click(object sender, EventArgs e)
-        {
-            positioningPlatform.position = (0, 0);
-        }
-
-        private void moveSpeedInput_ValueChanged(object sender, EventArgs e)
-        {
-        }
+        private void returnToZeroButton_Click(object sender, EventArgs e) => _motionController?.MoveAbsolute(0, 0);
 
         private void moveToStartPosition_Click(object sender, EventArgs e)
         {
-            var dev = positioningPlatform;
-            dev.position = (dev.startX0, dev.startY0);
-        }
-
-        private void moveToEndPosition_Click(object sender, EventArgs e)
-        {
-            var dev = positioningPlatform;
-            dev.position = (dev.endX1, dev.endY1);
-        }
-
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void exposureTimeInput_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void moveToStartPosition_Click_1(object sender, EventArgs e)
-        {
-            positioningPlatform.position = (positioningPlatform.startX0, positioningPlatform.startY0);
-            heightAdjustDevice.Position = (float)startZ0Input.Value;
-        }
-
-        private void positionXLable_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void moveToEndPosition_Click_1(object sender, EventArgs e)
-        {
-            positioningPlatform.position = (positioningPlatform.endX1, positioningPlatform.endY1);
-        }
-
-        private void caputureStartButton_Click(object sender, EventArgs e)
-        {
-
-            var (startX0, startY0, endX1, endY1) = (positioningPlatform.startX0, positioningPlatform.startY0, positioningPlatform.endX1, positioningPlatform.endY1);
-            var captureNumber = camera.captureNumber;
-            float deltaX = (endX1 - startX0) / (float)captureNumber;
-            float deltaY = (endY1 - startY0) / (float)captureNumber;
-            positioningPlatform.position = (startX0, startY0);
-            var dir = Directory.CreateDirectory($"Image-Captured-At{DateTime.Now.ToString("MM-dd-HH-mm-ss")}");
-            var captureInfo = $"({startX0}, {startY0}) -> ({endX1}, {endY1}), number: {captureNumber}, deltaX: {deltaX}, deltaY: {deltaY}\n";
-            Console.WriteLine( captureInfo );
-            File.WriteAllText(Path.Combine(dir.FullName, "CaptureInfo.txt"), captureInfo);
-            Console.WriteLine("Capture Start.");
-            for(int i = 0; i < camera.captureNumber; i++)
+            _motionController?.MoveAbsolute(StartX0, StartY0);
+            if (_heightAdjuster != null)
             {
-                captureProgressBar.Value = (i+1) * 100 / captureNumber;
-                positioningPlatform.position = (startX0 + i * deltaX, startY0 + i * deltaY);
-                var image = camera.getImage();
-                pictureBox2.Invoke(new Action(() => {
-                    pictureBox2.Image = image;
-                }));
-                image.Save(Path.Combine(dir.FullName, $"{i+1}.bmp"));
-                System.Threading.Thread.Sleep(CAPTURE_DELAY_MILLISECOND);
-                Console.WriteLine($"Capturing image: [{i+1}/{captureNumber}] ");
+                _heightAdjuster.ExpectedPosition = (float)startZ0Input.Value;
+                _heightAdjuster.ApplyMotion();
+            }
+
+        }
+
+        private void moveToEndPosition_Click(object sender, EventArgs e) => _motionController?.MoveAbsolute(EndX1, EndY1);
+
+        // Duplicate handlers from original code naming - merged logic
+        private void moveToEndPosition_Click_1(object sender, EventArgs e) => moveToEndPosition_Click(sender, e);
+        private void moveToStartPosition_Click_1(object sender, EventArgs e) => moveToStartPosition_Click(sender, e);
+        private void returnToZeroButton_Click_1(object sender, EventArgs e) => returnToZeroButton_Click(sender, e);
+        
+        // Empty handlers to satisfy designer if they exist
+        private void moveSpeedInput_ValueChanged(object sender, EventArgs e) { }
+        private void pictureBox2_Click(object sender, EventArgs e) { }
+        private void exposureTimeInput_ValueChanged(object sender, EventArgs e) { }
+        private void positionXLable_Click(object sender, EventArgs e) { }
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e) { }
+        private void groupBox1_Enter(object sender, EventArgs e) { }
+        private void currentHeight_ValueChanged(object sender, EventArgs e) { }
+
+        private async void caputureStartButton_Click(object sender, EventArgs e)
+        {
+            if (_captureService == null) return;
+            
+            try
+            {
+                _isCapturing = true;
+                caputureStartButton.Enabled = false;
+                
+                string dirName = $"Image-Captured-At{DateTime.Now:MM-dd-HH-mm-ss}";
+                
+                await _captureService.ExecuteCaptureSequenceAsync(
+                    StartX0, StartY0, EndX1, EndY1, (float)startZ0Input.Value,
+                    _camera.CaptureNumber,
+                    new Progress<int>(p => captureProgressBar.Value = p),
+                    img => {
+                         // Update PictureBox with captured image copy
+                         // Need to invoke? This Action runs on context of service? 
+                         // Service uses Task.Run so likely background.
+                         BeginInvoke(new Action(() => {
+                             var old = pictureBox2.Image;
+                             pictureBox2.Image = new Bitmap(img); // Clone to display
+                             if(old != null) old.Dispose();
+                         }));
+                    },
+                    dirName
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Capture Error: {ex.Message}");
+            }
+            finally
+            {
+                _isCapturing = false;
+                caputureStartButton.Enabled = true;
             }
         }
 
         private void addRectCoordButton_Click(object sender, EventArgs e)
         {
             commandListBox.Items.Add(new CartesianCoordinateDirectionalMotion((double)deltaXInput.Value, (double)deltaYInput.Value, (double)deltaZInputRect.Value, (int)rectCoordStepsInput.Value));
-            button5.Enabled = (commandListBox.Items.Count >= 1);
+            button5.Enabled = true;
         }
 
         private void addPolarCoordButton_Click(object sender, EventArgs e)
         {
             commandListBox.Items.Add(new PolarCoordinateDirectionalMotion((double)thetaInput.Value, (double)deltaRInput.Value, (double)deltaZInputPolar.Value, (int)polarCoordStepsInput.Value));
-            button5.Enabled = (commandListBox.Items.Count >= 1);
+            button5.Enabled = true;
         }
 
         private void motionRemoveButton_Click(object sender, EventArgs e)
         {
             if(commandListBox.SelectedItem != null)
-            {
                 commandListBox.Items.Remove(commandListBox.SelectedItem);
-            }
-            else
-            {
+            else if (commandListBox.Items.Count > 0)
                 commandListBox.Items.RemoveAt(commandListBox.Items.Count - 1);
+        }
+
+        private async void button5_Click(object sender, EventArgs e)
+        {
+            if (_captureService == null) return;
+            var motions = commandListBox.Items.Cast<IMotion>().ToList();
+            if (motions.Count == 0) return;
+
+            try
+            {
+                _isCapturing = true;
+                button5.Enabled = false;
+                
+                await _captureService.ApplyMotionsAsync(
+                    motions,
+                    (float)startZ0Input.Value,
+                    new Progress<int>(p => commandApplyProgressBar.Value = p),
+                    img => {
+                         BeginInvoke(new Action(() => {
+                             var old = pictureBox2.Image;
+                             pictureBox2.Image = new Bitmap(img);
+                             if(old != null) old.Dispose();
+                         }));
+                    },
+                    "" // Uses internal ImageSaver logic for now
+                );
+            }
+            catch(Exception ex)
+            {
+                 MessageBox.Show($"Motion Sequence Error: {ex.Message}");
+            }
+            finally
+            {
+                _isCapturing = false;
+                button5.Enabled = true;
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            button5.Enabled = false;
-            var saver = new ImageSaver();
-            var task = Task.Run(() =>
-            {
-                positioningPlatform.position = ((float)startX0Input.Value, (float)startY0Input.Value);
-                heightAdjustDevice.Position = (float)startZ0Input.Value;
-                MotionUtils.applyMotions(
-                    commandListBox.Items.Cast<IMotion>(),
-                    motion => { 
-                        positioningPlatform.incrementMove((float)motion.DeltaX, (float)motion.DeltaY);
-                        heightAdjustDevice.IncrementMove((float)motion.DeltaZ);
-                    },
-                    positioningPlatform.isMoving,
-                    p => commandApplyProgressBar.Invoke(new Action(() => {
-                        commandApplyProgressBar.Value = (int)(100 * p);
-                    })),
-                    () =>
-                    {
-                        var image = camera.getImage();
-                        commandApplyProgressBar.Invoke(new Action(() =>
-                        {
-                            pictureBox2.Image = image;
-                        }));
-                        var pos = positioningPlatform.position;
-                        saver.AddImage(image, $"{pos.x}, {pos.y}, {heightAdjustDevice.Position}");
-                    }
-                );
-                saver.Save();
-                button5.Invoke(new Action(() =>
-                {
-                    button5.Enabled = true;
-                }));
-            });
-                
-        }
-
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void HeightUpButton_Click(object sender, EventArgs e)
-        {
-            heightAdjustDevice.Position = heightAdjustDevice._position + heightAdjustDevice.StepSize;
-        }
-
+        private void HeightUpButton_Click(object sender, EventArgs e) { _heightAdjuster?.MoveRelative(_heightAdjuster.StepSize); startZ0Input.Value = (decimal)_heightAdjuster.ExpectedPosition; }
+        private void HeightDownButton_Click(object sender, EventArgs e) { _heightAdjuster?.MoveRelative(-_heightAdjuster.StepSize); startZ0Input.Value = (decimal)_heightAdjuster.ExpectedPosition; }
         private void HeightZeroButton_Click(object sender, EventArgs e)
         {
-            heightAdjustDevice.Position = 0;
+            if (_heightAdjuster != null) {
+                _heightAdjuster.ExpectedPosition = 0;
+                startZ0Input.Value = 0;
+                _heightAdjuster.ApplyMotion();
+            }
         }
 
-        private void HeightDownButton_Click(object sender, EventArgs e)
-        {
-            heightAdjustDevice.Position = heightAdjustDevice._position - heightAdjustDevice.StepSize;
-        }
-
-        private void returnToZeroButton_Click_1(object sender, EventArgs e)
-        {
-            positioningPlatform.position = (0, 0);
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void currentHeight_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

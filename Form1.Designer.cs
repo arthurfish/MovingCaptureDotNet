@@ -23,9 +23,7 @@ namespace MovingCaptureDotNet
             }
             base.Dispose(disposing);
         }
-        private PositioningPlatform positioningPlatform;
-        private Camera camera;
-        private HeightAdjustDevice heightAdjustDevice;
+
 
         #region Windows Form Designer generated code
 
@@ -117,8 +115,6 @@ namespace MovingCaptureDotNet
             this.heightStepSize = new System.Windows.Forms.NumericUpDown();
             this.HeightUpButton = new System.Windows.Forms.Button();
             this.label21 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveSpeedInput)).BeginInit();
@@ -153,16 +149,14 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightStepSize)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(802, 21);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox2.Location = new System.Drawing.Point(780, 21);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(831, 588);
+            this.pictureBox2.Size = new System.Drawing.Size(1310, 1091);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
@@ -241,7 +235,7 @@ namespace MovingCaptureDotNet
             // 
             this.moveSpeedInput.DecimalPlaces = 3;
             this.moveSpeedInput.Location = new System.Drawing.Point(164, 2);
-            this.moveSpeedInput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.moveSpeedInput.Margin = new System.Windows.Forms.Padding(2);
             this.moveSpeedInput.Minimum = new decimal(new int[] {
             100,
             0,
@@ -274,7 +268,7 @@ namespace MovingCaptureDotNet
             // 
             this.stepSizeInput.DecimalPlaces = 3;
             this.stepSizeInput.Location = new System.Drawing.Point(164, 38);
-            this.stepSizeInput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.stepSizeInput.Margin = new System.Windows.Forms.Padding(2);
             this.stepSizeInput.Minimum = new decimal(new int[] {
             100,
             0,
@@ -287,7 +281,7 @@ namespace MovingCaptureDotNet
             // exposureTimeInput
             // 
             this.exposureTimeInput.Location = new System.Drawing.Point(164, 74);
-            this.exposureTimeInput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.exposureTimeInput.Margin = new System.Windows.Forms.Padding(2);
             this.exposureTimeInput.Maximum = new decimal(new int[] {
             9999000,
             0,
@@ -377,7 +371,7 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel3.Controls.Add(this.positionYLable, 1, 1);
             this.tableLayoutPanel3.Controls.Add(this.label5, 0, 1);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(368, 754);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -417,7 +411,7 @@ namespace MovingCaptureDotNet
             // moveToStartPosition
             // 
             this.moveToStartPosition.Location = new System.Drawing.Point(317, 34);
-            this.moveToStartPosition.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.moveToStartPosition.Margin = new System.Windows.Forms.Padding(2);
             this.moveToStartPosition.Name = "moveToStartPosition";
             this.moveToStartPosition.Size = new System.Drawing.Size(61, 26);
             this.moveToStartPosition.TabIndex = 4;
@@ -428,7 +422,7 @@ namespace MovingCaptureDotNet
             // moveToEndPosition
             // 
             this.moveToEndPosition.Location = new System.Drawing.Point(317, 66);
-            this.moveToEndPosition.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.moveToEndPosition.Margin = new System.Windows.Forms.Padding(2);
             this.moveToEndPosition.Name = "moveToEndPosition";
             this.moveToEndPosition.Size = new System.Drawing.Size(61, 26);
             this.moveToEndPosition.TabIndex = 13;
@@ -458,7 +452,7 @@ namespace MovingCaptureDotNet
             // captureNumberInput
             // 
             this.captureNumberInput.Location = new System.Drawing.Point(589, 931);
-            this.captureNumberInput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.captureNumberInput.Margin = new System.Windows.Forms.Padding(2);
             this.captureNumberInput.Name = "captureNumberInput";
             this.captureNumberInput.Size = new System.Drawing.Size(60, 28);
             this.captureNumberInput.TabIndex = 7;
@@ -466,7 +460,7 @@ namespace MovingCaptureDotNet
             // caputureStartButton
             // 
             this.caputureStartButton.Location = new System.Drawing.Point(662, 931);
-            this.caputureStartButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.caputureStartButton.Margin = new System.Windows.Forms.Padding(2);
             this.caputureStartButton.Name = "caputureStartButton";
             this.caputureStartButton.Size = new System.Drawing.Size(88, 32);
             this.caputureStartButton.TabIndex = 20;
@@ -478,7 +472,7 @@ namespace MovingCaptureDotNet
             // 
             this.startX0Input.DecimalPlaces = 3;
             this.startX0Input.Location = new System.Drawing.Point(132, 34);
-            this.startX0Input.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.startX0Input.Margin = new System.Windows.Forms.Padding(2);
             this.startX0Input.Maximum = new decimal(new int[] {
             70,
             0,
@@ -497,7 +491,7 @@ namespace MovingCaptureDotNet
             // 
             this.startY0Input.DecimalPlaces = 3;
             this.startY0Input.Location = new System.Drawing.Point(229, 34);
-            this.startY0Input.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.startY0Input.Margin = new System.Windows.Forms.Padding(2);
             this.startY0Input.Maximum = new decimal(new int[] {
             70,
             0,
@@ -516,7 +510,7 @@ namespace MovingCaptureDotNet
             // 
             this.endY1Input.DecimalPlaces = 3;
             this.endY1Input.Location = new System.Drawing.Point(229, 66);
-            this.endY1Input.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.endY1Input.Margin = new System.Windows.Forms.Padding(2);
             this.endY1Input.Maximum = new decimal(new int[] {
             70,
             0,
@@ -535,7 +529,7 @@ namespace MovingCaptureDotNet
             // 
             this.endX1Input.DecimalPlaces = 3;
             this.endX1Input.Location = new System.Drawing.Point(132, 66);
-            this.endX1Input.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.endX1Input.Margin = new System.Windows.Forms.Padding(2);
             this.endX1Input.Maximum = new decimal(new int[] {
             70,
             0,
@@ -553,7 +547,7 @@ namespace MovingCaptureDotNet
             // captureProgressBar
             // 
             this.captureProgressBar.Location = new System.Drawing.Point(368, 974);
-            this.captureProgressBar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.captureProgressBar.Margin = new System.Windows.Forms.Padding(2);
             this.captureProgressBar.Name = "captureProgressBar";
             this.captureProgressBar.Size = new System.Drawing.Size(382, 20);
             this.captureProgressBar.TabIndex = 22;
@@ -577,7 +571,7 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel4.Controls.Add(this.label7, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.label13, 2, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(368, 823);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 3;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -611,7 +605,7 @@ namespace MovingCaptureDotNet
             this.commandListBox.Location = new System.Drawing.Point(3, 27);
             this.commandListBox.Name = "commandListBox";
             this.commandListBox.ScrollAlwaysVisible = true;
-            this.commandListBox.Size = new System.Drawing.Size(361, 580);
+            this.commandListBox.Size = new System.Drawing.Size(333, 580);
             this.commandListBox.TabIndex = 24;
             // 
             // groupBox1
@@ -625,7 +619,7 @@ namespace MovingCaptureDotNet
             this.groupBox1.Controls.Add(this.commandListBox);
             this.groupBox1.Location = new System.Drawing.Point(18, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(771, 603);
+            this.groupBox1.Size = new System.Drawing.Size(732, 603);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "移动命令";
@@ -633,7 +627,7 @@ namespace MovingCaptureDotNet
             // 
             // commandApplyProgressBar
             // 
-            this.commandApplyProgressBar.Location = new System.Drawing.Point(369, 568);
+            this.commandApplyProgressBar.Location = new System.Drawing.Point(355, 568);
             this.commandApplyProgressBar.Name = "commandApplyProgressBar";
             this.commandApplyProgressBar.Size = new System.Drawing.Size(372, 18);
             this.commandApplyProgressBar.TabIndex = 33;
@@ -641,7 +635,7 @@ namespace MovingCaptureDotNet
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.tableLayoutPanel7);
-            this.groupBox4.Location = new System.Drawing.Point(369, 27);
+            this.groupBox4.Location = new System.Drawing.Point(355, 27);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(360, 133);
             this.groupBox4.TabIndex = 32;
@@ -772,7 +766,7 @@ namespace MovingCaptureDotNet
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(369, 521);
+            this.button5.Location = new System.Drawing.Point(355, 521);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(372, 27);
             this.button5.TabIndex = 31;
@@ -782,7 +776,7 @@ namespace MovingCaptureDotNet
             // 
             // motionRemoveButton
             // 
-            this.motionRemoveButton.Location = new System.Drawing.Point(369, 482);
+            this.motionRemoveButton.Location = new System.Drawing.Point(355, 482);
             this.motionRemoveButton.Name = "motionRemoveButton";
             this.motionRemoveButton.Size = new System.Drawing.Size(372, 27);
             this.motionRemoveButton.TabIndex = 30;
@@ -793,7 +787,7 @@ namespace MovingCaptureDotNet
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.tableLayoutPanel6);
-            this.groupBox3.Location = new System.Drawing.Point(369, 317);
+            this.groupBox3.Location = new System.Drawing.Point(355, 317);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(372, 130);
             this.groupBox3.TabIndex = 29;
@@ -831,7 +825,7 @@ namespace MovingCaptureDotNet
             // 
             this.deltaZInputPolar.DecimalPlaces = 3;
             this.deltaZInputPolar.Location = new System.Drawing.Point(88, 70);
-            this.deltaZInputPolar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.deltaZInputPolar.Margin = new System.Windows.Forms.Padding(2);
             this.deltaZInputPolar.Minimum = new decimal(new int[] {
             100,
             0,
@@ -872,7 +866,7 @@ namespace MovingCaptureDotNet
             // addPolarCoordButton
             // 
             this.addPolarCoordButton.Location = new System.Drawing.Point(234, 36);
-            this.addPolarCoordButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.addPolarCoordButton.Margin = new System.Windows.Forms.Padding(2);
             this.addPolarCoordButton.Name = "addPolarCoordButton";
             this.addPolarCoordButton.Size = new System.Drawing.Size(90, 27);
             this.addPolarCoordButton.TabIndex = 27;
@@ -883,7 +877,7 @@ namespace MovingCaptureDotNet
             // polarCoordStepsInput
             // 
             this.polarCoordStepsInput.Location = new System.Drawing.Point(234, 2);
-            this.polarCoordStepsInput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.polarCoordStepsInput.Margin = new System.Windows.Forms.Padding(2);
             this.polarCoordStepsInput.Name = "polarCoordStepsInput";
             this.polarCoordStepsInput.Size = new System.Drawing.Size(90, 28);
             this.polarCoordStepsInput.TabIndex = 27;
@@ -935,7 +929,7 @@ namespace MovingCaptureDotNet
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.tableLayoutPanel5);
-            this.groupBox2.Location = new System.Drawing.Point(366, 173);
+            this.groupBox2.Location = new System.Drawing.Point(352, 173);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(372, 132);
             this.groupBox2.TabIndex = 28;
@@ -973,7 +967,7 @@ namespace MovingCaptureDotNet
             // 
             this.deltaZInputRect.DecimalPlaces = 3;
             this.deltaZInputRect.Location = new System.Drawing.Point(88, 70);
-            this.deltaZInputRect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.deltaZInputRect.Margin = new System.Windows.Forms.Padding(2);
             this.deltaZInputRect.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1014,7 +1008,7 @@ namespace MovingCaptureDotNet
             // addRectCoordButton
             // 
             this.addRectCoordButton.Location = new System.Drawing.Point(234, 36);
-            this.addRectCoordButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.addRectCoordButton.Margin = new System.Windows.Forms.Padding(2);
             this.addRectCoordButton.Name = "addRectCoordButton";
             this.addRectCoordButton.Size = new System.Drawing.Size(90, 27);
             this.addRectCoordButton.TabIndex = 27;
@@ -1025,7 +1019,7 @@ namespace MovingCaptureDotNet
             // rectCoordStepsInput
             // 
             this.rectCoordStepsInput.Location = new System.Drawing.Point(234, 2);
-            this.rectCoordStepsInput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rectCoordStepsInput.Margin = new System.Windows.Forms.Padding(2);
             this.rectCoordStepsInput.Name = "rectCoordStepsInput";
             this.rectCoordStepsInput.Size = new System.Drawing.Size(90, 28);
             this.rectCoordStepsInput.TabIndex = 27;
@@ -1193,32 +1187,11 @@ namespace MovingCaptureDotNet
             this.label21.TabIndex = 14;
             this.label21.Text = "当前高度 [mm]";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(5, 24);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(603, 332);
-            this.pictureBox1.TabIndex = 27;
-            this.pictureBox1.TabStop = false;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.pictureBox1);
-            this.groupBox5.Location = new System.Drawing.Point(768, 632);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox5.Size = new System.Drawing.Size(614, 362);
-            this.groupBox5.TabIndex = 28;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "重建3D图像";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1909, 1049);
-            this.Controls.Add(this.groupBox5);
+            this.ClientSize = new System.Drawing.Size(2117, 1117);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tableLayoutPanel4);
             this.Controls.Add(this.captureProgressBar);
@@ -1273,8 +1246,6 @@ namespace MovingCaptureDotNet
             this.tableLayoutPanel9.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightStepSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1362,12 +1333,10 @@ namespace MovingCaptureDotNet
         private NumericUpDown heightStepSize;
         private Label label21;
         private NumericUpDown currentHeight;
-        private PictureBox pictureBox1;
         private NumericUpDown deltaZInputRect;
         private Label label18;
         private NumericUpDown deltaZInputPolar;
         private Label label25;
-        private GroupBox groupBox5;
         private Label label26;
         private NumericUpDown startZ0Input;
     }
